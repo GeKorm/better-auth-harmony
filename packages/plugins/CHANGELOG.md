@@ -1,5 +1,13 @@
 # better-auth-harmony
 
+## 1.1.2
+
+### Patch Changes
+
+- [#10](https://github.com/GeKorm/better-auth-harmony/pull/10)
+  [`c2d7a10`](https://github.com/GeKorm/better-auth-harmony/commit/c2d7a10f23b62f3a4239c388e8c5075d0eac7b40)
+  Thanks [@GeKorm](https://github.com/GeKorm)! - Fix Validator ESM imports in some environments
+
 ## 1.1.1
 
 ### Patch Changes
