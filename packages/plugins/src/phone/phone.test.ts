@@ -85,7 +85,7 @@ describe('phone-number', async () => {
       }
     );
     expect(res.error).toBeNull();
-    expect(res.data?.user.phoneNumberVerified).toBe(true);
+    expect(res.data?.status).toBe(true);
   });
 
   it("shouldn't verify again with the same code", async () => {
@@ -192,9 +192,18 @@ describe('phone auth flow', async () => {
       phoneNumber: '+1 (555) 123-1234',
       code: otp
     });
-    expect(res.data?.user.phoneNumberVerified).toBe(true);
-    expect(res.data?.user.email).toBe('temp-+15551231234');
-    expect(res.data?.session).toBeDefined();
+
+    const session = await client.getSession({
+      fetchOptions: {
+        headers: {
+          Authorization: `Bearer ${res.data?.token ?? ''}`
+        },
+        throw: true
+      }
+    });
+    expect(session.user.phoneNumberVerified).toBe(true);
+    expect(session.user.email).toBe('temp-+15551231234');
+    expect(session.session.token).toBeDefined();
   });
 
   const headers = new Headers();
@@ -211,7 +220,7 @@ describe('phone auth flow', async () => {
         onSuccess: sessionSetter(headers)
       }
     );
-    expect(res.data?.session).toBeDefined();
+    expect(res.data?.status).toBeDefined();
   });
 
   const newEmail = 'new-email@email.com';
@@ -229,7 +238,7 @@ describe('phone auth flow', async () => {
       }
     });
     expect(changedEmailRes.error).toBeNull();
-    expect(changedEmailRes.data?.user.email).toBe(newEmail);
+    expect(changedEmailRes.data?.status).toBe(true);
   });
 
   it('should sign in with phone number and password', async () => {
@@ -237,7 +246,7 @@ describe('phone auth flow', async () => {
       phoneNumber: '+1 (555) 123-1234',
       password: 'password'
     });
-    expect(res.data?.session).toBeDefined();
+    expect(res.data?.token).toBeDefined();
   });
 
   it('should sign in with new email', async () => {
@@ -320,6 +329,6 @@ describe('verify phone-number', async () => {
       }
     );
     expect(res.error).toBeNull();
-    expect(res.data?.user.phoneNumberVerified).toBe(true);
+    expect(res.data?.status).toBe(true);
   });
 }, 15_000);
