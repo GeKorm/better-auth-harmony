@@ -7,6 +7,7 @@ import {
   parsePhoneNumberWithError
 } from 'libphonenumber-js/max';
 import type { HookEndpointContext } from 'better-auth';
+import { allPhone, type Matcher } from './matchers';
 
 interface NormalizationOptions {
   /**
@@ -67,15 +68,29 @@ export interface PhoneHarmonyOptions extends NormalizationOptions {
    * @see https://www.npmjs.com/package/libphonenumber-js#user-content-parse-phone-number
    */
   normalizer?: NormalizePhoneNumber;
+  /**
+   * Specify in which routes the plugin should run, for example by path.
+   * @example <caption>Ready-made matchers</caption>
+   * import * as matchers from 'better-auth-harmony/phone/matchers';
+   *
+   * export const auth = betterAuth({
+   *   // ... other config options
+   *   plugins: [
+   *     phoneNumber(),
+   *     phoneHarmony({ matchers: [matchers.signInPhone, matchers.phoneOtp]})
+   *   ]
+   * });
+   * @default [`allPhone`]
+   */
+  matchers?: Matcher[];
 }
-
-const phonePaths = ['/sign-in/phone-number', '/phone-number/send-otp', '/phone-number/verify'];
 
 const phoneHarmony = ({
   defaultCountry,
   defaultCallingCode,
   extract = true,
   acceptRawInputOnError = false,
+  matchers = [allPhone],
   normalizer
 }: PhoneHarmonyOptions = {}) =>
   ({
@@ -83,7 +98,7 @@ const phoneHarmony = ({
     hooks: {
       before: [
         {
-          matcher: (context) => phonePaths.some((pathname) => context.path.startsWith(pathname)),
+          matcher: (context) => matchers.some((matcher) => matcher(context)),
           handler: createAuthMiddleware(async (ctx) => {
             // Replace context number with the value of `normalizedPhone`
             const { phoneNumber } = ctx.body;
@@ -113,6 +128,7 @@ const phoneHarmony = ({
 
             return {
               context: {
+                ...ctx,
                 body: {
                   ...ctx.body,
                   phoneNumber: normalizedPhone
