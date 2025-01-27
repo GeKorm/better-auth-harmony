@@ -90,6 +90,8 @@ See the [Schema](#schema) section to add the fields manually.
   [Mailchecker](https://github.com/FGRibreau/mailchecker).
 - `normalizer` - Custom function to normalize the email address. By default uses
   [`validator.js/normalizeEmail()`](https://github.com/validatorjs/validator.js#sanitizers).
+- `matchers` - Customize when to run input `email` validation and normalization. Normalization
+  always runs on user creation and update regardless of this setting.
 
 ## Schema
 
@@ -158,3 +160,4 @@ information on configuring the `phoneNumber()`, including **validation**.
   [`parsePhoneNumberWithError`](https://www.npmjs.com/package/libphonenumber-js#user-content-parse-phone-number)
   from `libphonenumber-js/max`. Can be used to infer the country through the Request object, for
   example using IP address geolocation.
+- `matchers` - Customize when to run input `phoneNumber` validation.

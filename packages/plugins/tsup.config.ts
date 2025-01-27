@@ -51,7 +51,9 @@ export default defineConfig(() => ({
   entry: {
     index: './index.ts',
     email: './src/email/index.ts',
-    phone: './src/phone/index.ts'
+    'email/matchers': './src/email/matchers.ts',
+    phone: './src/phone/index.ts',
+    'phone/matchers': './src/phone/matchers.ts'
   },
   format: ['esm', 'cjs'],
   bundle: true,
