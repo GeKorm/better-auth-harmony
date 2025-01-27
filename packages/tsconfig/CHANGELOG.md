@@ -1,5 +1,13 @@
 # @repo/tsconfig
 
+## 0.0.3
+
+### Patch Changes
+
+- [#18](https://github.com/GeKorm/better-auth-harmony/pull/18)
+  [`bdbcbb3`](https://github.com/GeKorm/better-auth-harmony/commit/bdbcbb3f3ba9f226e988fc6925ced6a04d346852)
+  Thanks [@GeKorm](https://github.com/GeKorm)! - Upgrade dependencies
+
 ## 0.0.2
 
 ### Patch Changes

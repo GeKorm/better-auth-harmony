@@ -1,5 +1,24 @@
 # better-auth-harmony
 
+## 1.2.0
+
+### Minor Changes
+
+- [#18](https://github.com/GeKorm/better-auth-harmony/pull/18)
+  [`bdbcbb3`](https://github.com/GeKorm/better-auth-harmony/commit/bdbcbb3f3ba9f226e988fc6925ced6a04d346852)
+  Thanks [@GeKorm](https://github.com/GeKorm)! - Add optional matchers support, closes #15
+
+### Patch Changes
+
+- [#18](https://github.com/GeKorm/better-auth-harmony/pull/18)
+  [`bdbcbb3`](https://github.com/GeKorm/better-auth-harmony/commit/bdbcbb3f3ba9f226e988fc6925ced6a04d346852)
+  Thanks [@GeKorm](https://github.com/GeKorm)! - Upgrade dependencies
+
+- [#18](https://github.com/GeKorm/better-auth-harmony/pull/18)
+  [`bdbcbb3`](https://github.com/GeKorm/better-auth-harmony/commit/bdbcbb3f3ba9f226e988fc6925ced6a04d346852)
+  Thanks [@GeKorm](https://github.com/GeKorm)! - Protect and normalize more routes, like
+  change-email, fixes #16
+
 ## 1.1.3
 
 ### Patch Changes
