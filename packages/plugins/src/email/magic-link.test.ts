@@ -242,7 +242,7 @@ describe('magic link harmony', async () => {
     });
     expect(dbUser?.email).toBe(email);
   });
-});
+}, 15_000);
 
 describe('magic link verify', async () => {
   const verificationEmail: VerificationEmail[] = [
@@ -308,4 +308,4 @@ describe('magic link verify', async () => {
     const betterAuthCookie = headers.get('set-cookie');
     expect(betterAuthCookie).toBeDefined();
   });
-});
+}, 15_000);

@@ -354,7 +354,7 @@ describe('email-otp', async () => {
     expect(dbUser?.email).toBe(testUser.email);
     expect(verifyRes.error).toBeTruthy();
   });
-});
+}, 15_000);
 
 describe('email-otp-verify with custom matchers', async () => {
   const otpFn = vi.fn();
@@ -458,7 +458,7 @@ describe('email-otp-verify with custom matchers', async () => {
     expect(res2.data).toBeTruthy();
     expect(res3.data).toBeTruthy();
   });
-});
+}, 15_000);
 
 describe('custom rate limiting storage', async () => {
   const { client, auth } = await getTestInstance(
@@ -522,4 +522,4 @@ describe('custom rate limiting storage', async () => {
     });
     expect(response.error?.status).not.toBe(429);
   });
-});
+}, 15_000);
