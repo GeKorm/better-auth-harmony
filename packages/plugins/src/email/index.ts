@@ -10,22 +10,6 @@ export interface UserWithNormalizedEmail extends User {
   normalizedEmail?: string | null;
 }
 
-export interface Matchers {
-  /**
-   * The validator runs first based on this matcher.
-   * @default `allEmail`
-   */
-  validation?: Matcher;
-  /**
-   * @default `emailSignIn`
-   */
-  signIn?: Matcher;
-  /**
-   * @default `allEmailSignup`
-   */
-  signUp?: Matcher;
-}
-
 export interface EmailHarmonyOptions {
   /**
    * Allow logging in with any version of the unnormalized email address. Also works for password
