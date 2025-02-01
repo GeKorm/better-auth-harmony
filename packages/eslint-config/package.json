@@ -29,12 +29,12 @@
     "@eslint/js": "^9.19.0",
     "@eslint/json": "^0.10.0",
     "@eslint/markdown": "^6.2.2",
-    "@typescript-eslint/parser": "^8.21.0",
-    "@typescript-eslint/utils": "^8.21.0",
+    "@typescript-eslint/parser": "^8.22.0",
+    "@typescript-eslint/utils": "^8.22.0",
     "@vitest/eslint-plugin": "^1.1.25",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^10.0.1",
-    "eslint-config-turbo": "^2.3.4",
+    "eslint-config-turbo": "^2.4.0",
     "eslint-import-resolver-node": "^0.3.9",
     "eslint-import-resolver-typescript": "^3.7.0",
     "eslint-plugin-import": "^2.31.0",
@@ -45,10 +45,10 @@
     "eslint-plugin-regexp": "^2.7.0",
     "eslint-plugin-security": "^3.0.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",
-    "eslint-plugin-turbo": "^2.3.4",
+    "eslint-plugin-turbo": "^2.4.0",
     "eslint-plugin-unicorn": "^56.0.1",
     "eslint-plugin-yml": "^1.16.0",
-    "typescript-eslint": "^8.21.0"
+    "typescript-eslint": "^8.22.0"
   },
   "peerDependencies": {
     "eslint": "9.15.0",
