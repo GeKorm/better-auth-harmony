@@ -1,5 +1,15 @@
 # better-auth-harmony
 
+## 1.2.1
+
+### Patch Changes
+
+- [`7c445a5`](https://github.com/GeKorm/better-auth-harmony/commit/7c445a5e5363d8a5e63447f871ffa195eb5eb9b7)
+  Thanks [@GeKorm](https://github.com/GeKorm)! - Remove unused TS interface
+
+- [`eac4a0c`](https://github.com/GeKorm/better-auth-harmony/commit/eac4a0c1da650986521a1a15e77d576cb5a4bfe5)
+  Thanks [@GeKorm](https://github.com/GeKorm)! - Upgrade dependencies
+
 ## 1.2.0
 
 ### Minor Changes
