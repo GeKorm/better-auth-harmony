@@ -79,6 +79,33 @@ npx @better-auth/cli generate
 
 See the [Schema](#schema) section to add the fields manually.
 
+<details>
+
+<summary>Error <code class="notranslate">Cannot use import statement outside a module</code></summary>
+
+### Workarounds
+
+1. Use NodeJs 22 or higher
+2. Use `NODE_OPTIONS=--experimental-detect-module`
+
+Either as an environment variable, or via:
+
+```shell
+npx --node-options=--experimental-detect-module @better-auth/cli generate
+```
+
+or as a local script in package.json:
+
+```json
+{
+  "scripts": {
+    "auth-generate": "NODE_OPTIONS=--experimental-detect-module cli generate"
+  }
+}
+```
+
+</details>
+
 ## Options
 
 - `allowNormalizedSignin` (default=**false**) - Allow logging in with any version of the
