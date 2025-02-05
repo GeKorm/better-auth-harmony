@@ -44,6 +44,10 @@ jobs:
           cache-node-modules: true
           cache-install-state: true
 
+      - name: Use Latest Corepack # Fix for https://github.com/nodejs/corepack/issues/612
+        run: |
+          npm install -g corepack@latest
+
       - name: Submodule install
         run: cd better-auth/ && corepack enable && pnpm i && cd ..
 
@@ -86,6 +90,10 @@ jobs:
           enable-corepack: true
           cache-node-modules: true
           cache-install-state: true
+
+      - name: Use Latest Corepack # Fix for https://github.com/nodejs/corepack/issues/612
+        run: |
+          npm install -g corepack@latest
 
       - name: Submodule install
         run: cd better-auth/ && corepack enable && pnpm i && cd ..
