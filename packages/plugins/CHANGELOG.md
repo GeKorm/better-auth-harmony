@@ -1,5 +1,12 @@
 # better-auth-harmony
 
+## 1.2.2
+
+### Patch Changes
+
+- [`2bdf714`](https://github.com/GeKorm/better-auth-harmony/commit/2bdf714ac25f1298481490e1a3be02aec56bdacc)
+  Thanks [@GeKorm](https://github.com/GeKorm)! - Document workaround for ESM/CJS interop error
+
 ## 1.2.1
 
 ### Patch Changes
