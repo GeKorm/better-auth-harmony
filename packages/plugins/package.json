@@ -103,7 +103,7 @@
     "tsup": "^8.3.6",
     "typescript": "5.7.3",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^2.1.8"
+    "vitest": "^2.1.9"
   },
   "peerDependencies": {
     "better-auth": "^1.0.3"
