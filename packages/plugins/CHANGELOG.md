@@ -1,5 +1,13 @@
 # better-auth-harmony
 
+## 1.2.3
+
+### Patch Changes
+
+- [#25](https://github.com/GeKorm/better-auth-harmony/pull/25)
+  [`30a5a4e`](https://github.com/GeKorm/better-auth-harmony/commit/30a5a4e04e579afb27624ceae7cfdf26c00d5ec8)
+  Thanks [@dependabot](https://github.com/apps/dependabot)! - Upgrade better-auth (dependabot)
+
 ## 1.2.2
 
 ### Patch Changes
