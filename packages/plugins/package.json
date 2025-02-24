@@ -97,7 +97,7 @@
     "@types/react-dom": "19.0.3",
     "@types/validator": "^13.12.2",
     "@vitest/coverage-v8": "^2.1.8",
-    "better-auth": "1.1.16",
+    "better-auth": "1.1.20",
     "eslint": "^9.19.0",
     "rimraf": "^6.0.1",
     "tsup": "^8.3.6",
