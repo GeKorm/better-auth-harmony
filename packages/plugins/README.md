@@ -81,12 +81,28 @@ See the [Schema](#schema) section to add the fields manually.
 
 <details>
 
+<summary>Error <code class="notranslate">Error [ERR_MODULE_NOT_FOUND]: Cannot find module</code></summary>
+
+### Next.js
+
+Add `better-auth-harmony` to `transpilePackages` in
+[next.config](https://nextjs.org/docs/app/api-reference/config/next-config-js/transpilePackages)
+
+### Vite
+
+Add `better-auth-harmony` to `ssr.noExternal` in
+[vite.config](https://vite.dev/config/ssr-options#ssr-noexternal)
+
+</details>
+
+<details>
+
 <summary>Error <code class="notranslate">Cannot use import statement outside a module</code></summary>
 
 ### Workarounds
 
-1. Use NodeJs 22 or higher
-2. Use `NODE_OPTIONS=--experimental-detect-module`
+- Use NodeJs 22 or higher
+- Or use `NODE_OPTIONS=--experimental-detect-module` for Node >= 20.10
 
 Either as an environment variable, or via:
 
