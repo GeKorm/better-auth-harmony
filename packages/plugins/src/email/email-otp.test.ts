@@ -1,8 +1,11 @@
 /* eslint-disable no-await-in-loop -- copied from better-auth */
-import { emailOTPClient } from 'better-auth/client/plugins';
-import { bearer } from 'better-auth/plugins';
-import { emailOTP } from 'better-auth/plugins/email-otp';
 import { afterAll, describe, expect, it, vi } from 'vitest';
+// eslint-disable-next-line import/no-relative-packages -- couldn't find a better way to include it
+import { bearer } from '../../../../better-auth/packages/better-auth/src/plugins/bearer';
+// eslint-disable-next-line import/no-relative-packages -- couldn't find a better way to include it
+import { emailOTP } from '../../../../better-auth/packages/better-auth/src/plugins/email-otp';
+// eslint-disable-next-line import/no-relative-packages -- couldn't find a better way to include it
+import { emailOTPClient } from '../../../../better-auth/packages/better-auth/src/plugins/email-otp/client';
 // eslint-disable-next-line import/no-relative-packages -- couldn't find a better way to include it
 import { getTestInstance } from '../../../../better-auth/packages/better-auth/src/test-utils/test-instance';
 import emailHarmony, { type UserWithNormalizedEmail } from '.';
@@ -16,6 +19,9 @@ import {
   emailSignIn,
   emailSignUp
 } from './matchers';
+// eslint-disable-next-line import/no-relative-packages -- couldn't find a better way to include it
+import type { BetterAuthPlugin } from '../../../../better-auth/packages/better-auth/src/types';
+
 // TODO: Normalization check, validation check
 interface SQLiteDB {
   close: () => Promise<void>;
@@ -38,7 +44,7 @@ describe('email-otp', async () => {
   const { client, auth, db } = await getTestInstance(
     {
       plugins: [
-        bearer(),
+        bearer() as BetterAuthPlugin,
         emailOTP({
           // eslint-disable-next-line @typescript-eslint/require-await -- better-auth types
           async sendVerificationOTP({ email, otp: _otp, type }) {
@@ -47,7 +53,7 @@ describe('email-otp', async () => {
           },
           sendVerificationOnSignUp: true
         }),
-        emailHarmony({ allowNormalizedSignin: true })
+        emailHarmony({ allowNormalizedSignin: true }) as BetterAuthPlugin
       ],
       emailVerification: {
         autoSignInAfterVerification: true
@@ -306,7 +312,7 @@ describe('email-otp', async () => {
     const { client: customClient } = await getTestInstance(
       {
         plugins: [
-          emailHarmony({ allowNormalizedSignin: true }),
+          emailHarmony({ allowNormalizedSignin: true }) as BetterAuthPlugin,
           bearer(),
           emailOTP({
             // eslint-disable-next-line @typescript-eslint/require-await -- better-auth types
@@ -368,7 +374,7 @@ describe('email-otp-verify with custom matchers', async () => {
             validation: matchers,
             signIn: matchers.slice(1)
           }
-        }),
+        }) as BetterAuthPlugin,
         emailOTP({
           // eslint-disable-next-line @typescript-eslint/require-await -- better-auth types
           async sendVerificationOTP({ email, otp: _otp, type }) {
@@ -389,7 +395,7 @@ describe('email-otp-verify with custom matchers', async () => {
   );
 
   const { data: testData } = await client.signUp.email({
-    email: 'example@gmail.com',
+    email: 'example+test@gmail.com',
     password: 'test-password',
     name: 'test-name'
   });
@@ -467,7 +473,7 @@ describe('custom rate limiting storage', async () => {
         enabled: true
       },
       plugins: [
-        emailHarmony({ allowNormalizedSignin: true }),
+        emailHarmony({ allowNormalizedSignin: true }) as BetterAuthPlugin,
         emailOTP({
           async sendVerificationOTP() {}
         })

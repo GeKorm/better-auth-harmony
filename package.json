@@ -27,8 +27,8 @@
     "@changesets/cli": "^2.28.1",
     "@repo/eslint-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
-    "eslint": "^9.21.0",
-    "prettier": "^3.5.2",
+    "eslint": "^9.22.0",
+    "prettier": "^3.5.3",
     "turbo": "^2.4.4",
     "typescript": "^5.8.2"
   }
