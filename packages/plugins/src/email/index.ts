@@ -1,9 +1,9 @@
-import { type User } from 'better-auth';
 import { APIError } from 'better-auth/api';
 import { type BetterAuthPlugin, createAuthMiddleware } from 'better-auth/plugins';
 import Mailchecker from 'mailchecker';
 import isEmail from 'validator/es/lib/isEmail';
 import normalizeEmail from 'validator/es/lib/normalizeEmail';
+import type { User } from 'better-auth';
 import { allEmail, allEmailSignIn, type Matcher } from './matchers';
 
 export interface UserWithNormalizedEmail extends User {
@@ -56,6 +56,11 @@ export interface EmailHarmonyOptions {
      */
     validation?: Matcher[];
   };
+  /**
+   * Field name to use for storing and querying normalized email addresses.
+   * @default 'normalizedEmail'
+   */
+  normalizedEmailField?: string;
 }
 
 interface Context {
@@ -83,7 +88,8 @@ const emailHarmony = ({
   allowNormalizedSignin = false,
   validator = validateEmail,
   matchers = {},
-  normalizer = normalizeEmail
+  normalizer = normalizeEmail,
+  normalizedEmailField = 'normalizedEmail'
 }: EmailHarmonyOptions = {}) =>
   ({
     id: 'harmony-email',
@@ -100,7 +106,7 @@ const emailHarmony = ({
         return {
           data: {
             ...(user as Required<User>),
-            normalizedEmail
+            [normalizedEmailField]: normalizedEmail
           }
         };
       };
@@ -123,7 +129,7 @@ const emailHarmony = ({
     schema: {
       user: {
         fields: {
-          normalizedEmail: {
+          [normalizedEmailField]: {
             type: 'string',
             required: false,
             unique: true,
@@ -168,7 +174,7 @@ const emailHarmony = ({
                 model: 'user',
                 where: [
                   {
-                    field: 'normalizedEmail',
+                    field: normalizedEmailField,
                     value: normalizedEmail
                   }
                 ]
