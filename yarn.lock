@@ -1960,7 +1960,7 @@ __metadata:
     "@types/react-dom": "npm:19.0.4"
     "@types/validator": "npm:^13.12.2"
     "@vitest/coverage-v8": "npm:^2.1.9"
-    better-auth: "npm:1.2.3"
+    better-auth: "npm:1.2.4"
     eslint: "npm:^9.22.0"
     libphonenumber-js: "npm:^1.12.5"
     mailchecker: "npm:^6.0.16"
@@ -1975,9 +1975,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"better-auth@npm:1.2.3":
-  version: 1.2.3
-  resolution: "better-auth@npm:1.2.3"
+"better-auth@npm:1.2.4":
+  version: 1.2.4
+  resolution: "better-auth@npm:1.2.4"
   dependencies:
     "@better-auth/utils": "npm:0.2.3"
     "@better-fetch/fetch": "npm:^1.1.15"
@@ -1988,11 +1988,11 @@ __metadata:
     better-call: "npm:^1.0.3"
     defu: "npm:^6.1.4"
     jose: "npm:^5.9.6"
-    kysely: "npm:^0.27.4"
+    kysely: "npm:^0.27.6"
     nanostores: "npm:^0.11.3"
     valibot: "npm:1.0.0-beta.15"
     zod: "npm:^3.24.1"
-  checksum: 10c0/ff385dd1aff26d0c4def9accb1922917b62d4d68e57c052bbfd54341c84c0533fd2457355b497cf662e312d323c5ec8c6023ca01f276f6a27c7ec8d368e66892
+  checksum: 10c0/68bfb202dd83a1c92d7a02b04bedf21d24f7f9536351dd0adb507b5add81c91838901cb5a84526b94bc524be8f2aba41baed748716718064564211292fe1b7b9
   languageName: node
   linkType: hard
 
@@ -4451,7 +4451,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"kysely@npm:^0.27.4":
+"kysely@npm:^0.27.6":
   version: 0.27.6
   resolution: "kysely@npm:0.27.6"
   checksum: 10c0/81cf668d196be265fa6782afb72d051590ce3f5c72b6456cc4a6eccbdfbac12bb1c938a8ec09b45de995854cfffb9972ce19553df2a4cf13dded3dc6cdddc326
