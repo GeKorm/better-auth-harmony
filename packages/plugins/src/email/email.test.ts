@@ -11,8 +11,11 @@ import {
   allEmailSignIn,
   changeEmail,
   emailForget,
-  emailSendVerification
+  emailSendVerification,
+  emailSignUp
 } from './matchers';
+// eslint-disable-next-line import/no-relative-packages -- couldn't find a better way to include it
+import type { BetterAuthPlugin } from '../../../../better-auth/packages/better-auth/src/types';
 
 interface SQLiteDB {
   close: () => Promise<void>;
@@ -35,10 +38,10 @@ describe('email harmony', async () => {
         emailHarmony({
           allowNormalizedSignin: true,
           matchers: {
-            signIn: [emailForget, allEmailSignIn],
+            signIn: [emailForget, allEmailSignIn, emailSignUp],
             validation: [emailForget, allEmail]
           }
-        })
+        }) as BetterAuthPlugin
       ]
     },
     {
@@ -184,7 +187,7 @@ describe('Email Verification', async () => {
             signIn: [emailSendVerification, allEmailSignIn],
             validation: [emailSendVerification, allEmail]
           }
-        })
+        }) as BetterAuthPlugin
       ]
     },
     {
@@ -235,7 +238,7 @@ describe('email harmony with email change', async () => {
             validation: [changeEmail, allEmail],
             signIn: [changeEmail, allEmailSignIn]
           }
-        })
+        }) as BetterAuthPlugin
       ],
       emailVerification: {
         // eslint-disable-next-line @typescript-eslint/require-await -- better-auth types
@@ -332,6 +335,18 @@ describe('email harmony with email change', async () => {
     expect(error).not.toBeNull();
   });
 
+  it('should reject non-string email', async () => {
+    const newEmailRaw = 22;
+    const { error } = await client.changeEmail({
+      // @ts-expect-error -- extra safety test
+      newEmail: newEmailRaw,
+      fetchOptions: {
+        headers
+      }
+    });
+    expect(error).not.toBeNull();
+  });
+
   it('should prevent changing into email variations of existing addresses', async () => {
     // Attempt to duplicate email
     const { error } = await client.changeEmail({
@@ -371,7 +386,7 @@ describe('combined with phone number plugin', async () => {
             }
           }
         }),
-        emailHarmony({ allowNormalizedSignin: true })
+        emailHarmony({ allowNormalizedSignin: true }) as BetterAuthPlugin
       ]
     },
     {

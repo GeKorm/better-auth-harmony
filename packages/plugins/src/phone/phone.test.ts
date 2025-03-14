@@ -8,7 +8,9 @@ import { afterAll, describe, expect, it, vi } from 'vitest';
 import { getTestInstance } from '../../../../better-auth/packages/better-auth/src/test-utils/test-instance';
 import emailHarmony from '../email';
 import phoneHarmony from '.';
-import { allPhone, phoneOtp, phoneVerify, signInPhone } from './matchers';
+import { allPhone, phoneForget, phoneOtp, phoneReset, phoneVerify, signInPhone } from './matchers';
+// eslint-disable-next-line import/no-relative-packages -- couldn't find a better way to include it
+import type { BetterAuthPlugin } from '../../../../better-auth/packages/better-auth/src/types';
 
 // Tests largely copied from
 // https://github.com/better-auth/better-auth/blob/9b00f1e169349b845b8bdafcc4c8359eb7e397fa/packages/better-auth/src/plugins/phone-number/phone-number.test.ts
@@ -33,7 +35,9 @@ describe('phone-number', async () => {
             }
           }
         }),
-        phoneHarmony({ matchers: [signInPhone, phoneOtp, phoneVerify] })
+        phoneHarmony({
+          matchers: [signInPhone, phoneOtp, phoneVerify, phoneForget, phoneReset]
+        }) as BetterAuthPlugin
       ]
     },
     {
@@ -158,7 +162,7 @@ describe('phone auth flow', async () => {
             }
           }
         }),
-        phoneHarmony({ acceptRawInputOnError: true, matchers: [allPhone] })
+        phoneHarmony({ acceptRawInputOnError: true, matchers: [allPhone] }) as BetterAuthPlugin
       ],
       user: {
         changeEmail: {
@@ -291,7 +295,7 @@ describe('verify phone-number', async () => {
             if (phone === '5') throw new Error('Test'); // to test non-ParseError errors
             return parsePhoneNumberWithError(phone).number;
           }
-        })
+        }) as BetterAuthPlugin
       ]
     },
     {
@@ -367,8 +371,8 @@ describe('combined with email harmony', () => {
               }
             }
           }),
-          emailHarmony(),
-          phoneHarmony()
+          emailHarmony() as BetterAuthPlugin,
+          phoneHarmony() as BetterAuthPlugin
         ]
       },
       {

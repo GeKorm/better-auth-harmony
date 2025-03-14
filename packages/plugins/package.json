@@ -5,7 +5,7 @@
   "description": "Validation and normalization for better-auth",
   "type": "module",
   "scripts": {
-    "lint": "CHECK_REDOS=true eslint .",
+    "lint": "eslint .",
     "typecheck": "tsc --noEmit --project tsconfig.build.json",
     "emit-types": "rimraf -g dist/**/*{.ts,.ts.map}; tsc --emitDeclarationOnly --declaration --project tsconfig.build.json",
     "build": "tsup --clean --dts --minify --tsconfig tsconfig.build.json",
@@ -93,13 +93,13 @@
     "@repo/eslint-config": "*",
     "@repo/tsconfig": "*",
     "@types/eslint": "^9.6.1",
-    "@types/node": "^22.13.8",
+    "@types/node": "^22.13.10",
     "@types/react": "^19.0.10",
     "@types/react-dom": "19.0.4",
     "@types/validator": "^13.12.2",
     "@vitest/coverage-v8": "^2.1.9",
-    "better-auth": "1.1.21",
-    "eslint": "^9.21.0",
+    "better-auth": "1.2.3",
+    "eslint": "^9.22.0",
     "rimraf": "^6.0.1",
     "tsup": "^8.4.0",
     "typescript": "^5.8.2",
@@ -110,7 +110,7 @@
     "better-auth": "^1.0.3"
   },
   "dependencies": {
-    "libphonenumber-js": "^1.12.4",
+    "libphonenumber-js": "^1.12.5",
     "mailchecker": "^6.0.16",
     "validator": "^13.12.0"
   }

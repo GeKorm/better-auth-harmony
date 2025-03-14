@@ -1,6 +1,7 @@
 import { type User } from 'better-auth';
 import { APIError } from 'better-auth/api';
-import { type BetterAuthPlugin, createAuthMiddleware } from 'better-auth/plugins';
+import { createAuthMiddleware } from 'better-auth/plugins';
+import { type BetterAuthPlugin } from 'better-auth/types';
 import Mailchecker from 'mailchecker';
 import isEmail from 'validator/es/lib/isEmail';
 import normalizeEmail from 'validator/es/lib/normalizeEmail';
@@ -84,7 +85,7 @@ const emailHarmony = ({
   validator = validateEmail,
   matchers = {},
   normalizer = normalizeEmail
-}: EmailHarmonyOptions = {}) =>
+}: EmailHarmonyOptions = {}): BetterAuthPlugin =>
   ({
     id: 'harmony-email',
     init() {
@@ -141,8 +142,10 @@ const emailHarmony = ({
               ? matchers.validation.some((matcher) => matcher(context))
               : allEmail(context),
           handler: createAuthMiddleware(async (ctx) => {
-            const email: unknown =
-              ctx.path === '/change-email' ? ctx.body.newEmail : getEmail(ctx).email;
+            const email =
+              ctx.path === '/change-email'
+                ? (ctx.body as Context['body'])?.newEmail
+                : getEmail(ctx).email;
 
             if (typeof email !== 'string') return;
 
@@ -176,16 +179,28 @@ const emailHarmony = ({
 
               if (!user) return;
 
-              return {
-                context: {
-                  ...ctx,
-                  [container]: {
-                    ...ctx[container],
-                    email: user.email,
-                    normalizedEmail
+              // Types are broken without explicit reference
+              return container === 'query'
+                ? {
+                    context: {
+                      ...ctx,
+                      query: {
+                        ...ctx.query,
+                        email: user.email,
+                        normalizedEmail
+                      }
+                    }
                   }
-                }
-              };
+                : {
+                    context: {
+                      ...ctx,
+                      body: {
+                        ...(ctx.body as Context['body']),
+                        email: user.email,
+                        normalizedEmail
+                      }
+                    }
+                  };
             }
           })
         }

@@ -1,12 +1,17 @@
 /* eslint-disable n/no-unsupported-features/node-builtins -- allow in tests */
-import { createAuthClient } from 'better-auth/client';
-import { magicLinkClient } from 'better-auth/client/plugins';
-import { magicLink } from 'better-auth/plugins/magic-link';
 import { afterAll, describe, expect, it, vi } from 'vitest';
+// eslint-disable-next-line import/no-relative-packages -- couldn't find a better way to include it
+import { createAuthClient } from '../../../../better-auth/packages/better-auth/src/client';
+// eslint-disable-next-line import/no-relative-packages -- couldn't find a better way to include it
+import { magicLinkClient } from '../../../../better-auth/packages/better-auth/src/client/plugins';
+// eslint-disable-next-line import/no-relative-packages -- couldn't find a better way to include it
+import { magicLink } from '../../../../better-auth/packages/better-auth/src/plugins/magic-link';
 // eslint-disable-next-line import/no-relative-packages -- couldn't find a better way to include it
 import { getTestInstance } from '../../../../better-auth/packages/better-auth/src/test-utils/test-instance';
 import emailHarmony, { type UserWithNormalizedEmail } from '.';
 import { emailSignIn, emailSignUp, magicLinkSignIn } from './matchers';
+// eslint-disable-next-line import/no-relative-packages -- couldn't find a better way to include it
+import type { BetterAuthPlugin } from '../../../../better-auth/packages/better-auth/src/types';
 
 interface VerificationEmail {
   email: string;
@@ -35,7 +40,7 @@ describe('magic link harmony', async () => {
             validation: matchers,
             signIn: matchers.slice(1)
           }
-        }),
+        }) as BetterAuthPlugin,
         magicLink({
           // eslint-disable-next-line @typescript-eslint/require-await -- better-auth types
           async sendMagicLink(data) {
@@ -66,6 +71,13 @@ describe('magic link harmony', async () => {
     await (auth.options.database as unknown as SQLiteDB).close();
   });
 
+  it('should reject temporary emails', async () => {
+    const { error } = await client.signIn.magicLink({
+      email: 'example@mailinator.com'
+    });
+    expect(error).toBeDefined();
+  });
+
   it('should send magic link', async () => {
     await client.signIn.magicLink({
       email: testUser.email
@@ -74,13 +86,6 @@ describe('magic link harmony', async () => {
       email: testUser.email,
       url: expect.stringContaining('http://localhost:3000/api/auth/magic-link/verify') as string
     });
-  });
-
-  it('should reject temporary emails', async () => {
-    const { error } = await client.signIn.magicLink({
-      email: 'example@mailinator.com'
-    });
-    expect(error).toBeDefined();
   });
 
   it('should verify magic link', async () => {

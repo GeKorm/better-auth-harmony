@@ -1,13 +1,19 @@
+import { type HookEndpointContext } from 'better-auth';
 import { APIError } from 'better-auth/api';
-import { type BetterAuthPlugin, createAuthMiddleware } from 'better-auth/plugins';
+import { createAuthMiddleware } from 'better-auth/plugins';
 import {
   type CountryCode,
   type E164Number,
   ParseError,
   parsePhoneNumberWithError
 } from 'libphonenumber-js/max';
-import type { HookEndpointContext } from 'better-auth';
+import type { BetterAuthPlugin } from 'better-auth/types';
 import { allPhone, type Matcher } from './matchers';
+
+interface Context {
+  body: Record<string, unknown>;
+  query?: Record<string, unknown>;
+}
 
 interface NormalizationOptions {
   /**
@@ -92,7 +98,7 @@ const phoneHarmony = ({
   acceptRawInputOnError = false,
   matchers = [allPhone],
   normalizer
-}: PhoneHarmonyOptions = {}) =>
+}: PhoneHarmonyOptions = {}): BetterAuthPlugin =>
   ({
     id: 'harmony-phone-number',
     hooks: {
@@ -101,7 +107,7 @@ const phoneHarmony = ({
           matcher: (context) => matchers.some((matcher) => matcher(context)),
           handler: createAuthMiddleware(async (ctx) => {
             // Replace context number with the value of `normalizedPhone`
-            const { phoneNumber } = ctx.body;
+            const { phoneNumber } = ctx.body as Context['body'];
 
             if (typeof phoneNumber !== 'string') return;
 
@@ -130,7 +136,7 @@ const phoneHarmony = ({
               context: {
                 ...ctx,
                 body: {
-                  ...ctx.body,
+                  ...(ctx.body as Context['body']),
                   phoneNumber: normalizedPhone
                 }
               }
