@@ -37,6 +37,7 @@ and additional validation, blocking over 55,000 temporary email domains.
   - [Getting Started](#getting-started)
   - [Options](#options)
   - [Schema](#schema)
+  - [Troubleshooting ESM](#troubleshooting-esm)
 - [Phone number](#phone-number)
   - [Getting Started](#getting-started-1)
   - [Options](#options-1)
@@ -79,6 +80,11 @@ npx @better-auth/cli generate
 
 See the [Schema](#schema) section to add the fields manually.
 
+## Troubleshooting ESM
+
+The [validator.js](https://github.com/validatorjs/validator.js) package lacks proper ESM support.
+Please open an issue in this repo if the following workarounds don't help.
+
 <details>
 
 <summary>Error <code class="notranslate">Error [ERR_MODULE_NOT_FOUND]: Cannot find module</code></summary>
@@ -119,6 +125,10 @@ or as a local script in package.json:
   }
 }
 ```
+
+If none of the above works, consider [yarn patch](https://yarnpkg.com/cli/patch) or
+[npm patch-package](https://www.npmjs.com/package/patch-package) to add `"type": "module"` to
+_validator_'s package.json.
 
 </details>
 
