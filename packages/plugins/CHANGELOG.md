@@ -1,5 +1,17 @@
 # better-auth-harmony
 
+## 1.2.4
+
+### Patch Changes
+
+- [#29](https://github.com/GeKorm/better-auth-harmony/pull/29)
+  [`dcf3eff`](https://github.com/GeKorm/better-auth-harmony/commit/dcf3eff74799a12257085a0735744443c60150e1)
+  Thanks [@GeKorm](https://github.com/GeKorm)! - Upgrade better-auth, add phone reset password
+  matchers new in better-auth@1.2.0
+
+- [`ba4b91c`](https://github.com/GeKorm/better-auth-harmony/commit/ba4b91cd0cbf82013bb4ed2d11578ba8dc788d6f)
+  Thanks [@GeKorm](https://github.com/GeKorm)! - Upgrade dependencies
+
 ## 1.2.3
 
 ### Patch Changes
