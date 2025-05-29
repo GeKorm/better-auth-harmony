@@ -1,6 +1,6 @@
 {
   "name": "better-auth-harmony",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "author": "George Kormaris <npm@gekorm.com>",
   "description": "Validation and normalization for better-auth",
   "type": "module",
