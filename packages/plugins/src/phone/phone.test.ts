@@ -65,7 +65,7 @@ describe('phone-number', async () => {
       // @ts-expect-error -- extra safety test
       phoneNumber: 22
     });
-    expect(error?.status).toBe(500);
+    expect(error?.status).toBe(400);
     expect(otp).toBe('');
   });
 
@@ -73,7 +73,7 @@ describe('phone-number', async () => {
     const { error } = await client.phoneNumber.sendOtp({
       phoneNumber: '55555555555'
     });
-    expect(error?.status).toBe(500);
+    expect(error?.status).toBe(400);
     expect(otp).toBe('');
   });
 
@@ -104,7 +104,7 @@ describe('phone-number', async () => {
       phoneNumber: testPhoneNumber,
       code: otp
     });
-    expect(res.error?.status).toBe(500);
+    expect(res.error?.status).toBe(400);
   });
 
   it('should update phone number', async () => {
@@ -142,7 +142,7 @@ describe('phone-number', async () => {
       phoneNumber: '+25120201212',
       code: otp
     });
-    expect(res.error?.status).toBe(500);
+    expect(res.error?.status).toBe(400);
   });
 }, 15_000);
 
@@ -400,7 +400,7 @@ describe('combined with email harmony', () => {
         // @ts-expect-error -- extra safety test
         phoneNumber: 22
       });
-      expect(error?.status).toBe(500);
+      expect(error?.status).toBe(400);
       expect(otp).toBe('');
     });
 
@@ -408,7 +408,7 @@ describe('combined with email harmony', () => {
       const { error } = await client.phoneNumber.sendOtp({
         phoneNumber: '55555555555'
       });
-      expect(error?.status).toBe(500);
+      expect(error?.status).toBe(400);
       expect(otp).toBe('');
     });
 
@@ -439,7 +439,7 @@ describe('combined with email harmony', () => {
         phoneNumber: testPhoneNumber,
         code: otp
       });
-      expect(res.error?.status).toBe(500);
+      expect(res.error?.status).toBe(400);
     });
 
     it('should update phone number', async () => {
@@ -477,7 +477,7 @@ describe('combined with email harmony', () => {
         phoneNumber: '+25120201212',
         code: otp
       });
-      expect(res.error?.status).toBe(500);
+      expect(res.error?.status).toBe(400);
     });
   }, 15_000);
 });

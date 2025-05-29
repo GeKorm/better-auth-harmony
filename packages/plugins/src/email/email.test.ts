@@ -414,7 +414,7 @@ describe('combined with phone number plugin', async () => {
       // @ts-expect-error -- extra safety test
       phoneNumber: 22
     });
-    expect(error?.status).toBe(500);
+    expect(error?.status).toBe(400);
     expect(otp).toBe('');
   });
 
@@ -445,7 +445,7 @@ describe('combined with phone number plugin', async () => {
       phoneNumber: testPhoneNumber,
       code: otp
     });
-    expect(res.error?.status).toBe(500);
+    expect(res.error?.status).toBe(400);
   });
 
   it('should update phone number', async () => {
@@ -483,6 +483,6 @@ describe('combined with phone number plugin', async () => {
       phoneNumber: '+25120201212',
       code: otp
     });
-    expect(res.error?.status).toBe(500);
+    expect(res.error?.status).toBe(400);
   });
 }, 15_000);

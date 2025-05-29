@@ -93,16 +93,16 @@
     "@repo/eslint-config": "*",
     "@repo/tsconfig": "*",
     "@types/eslint": "^9.6.1",
-    "@types/node": "^22.13.10",
-    "@types/react": "^19.0.10",
-    "@types/react-dom": "19.0.4",
-    "@types/validator": "^13.12.2",
+    "@types/node": "^22.15.24",
+    "@types/react": "^19.1.6",
+    "@types/react-dom": "19.1.5",
+    "@types/validator": "^13.15.1",
     "@vitest/coverage-v8": "^2.1.9",
-    "better-auth": "1.2.4",
-    "eslint": "^9.22.0",
+    "better-auth": "1.2.8",
+    "eslint": "^9.27.0",
     "rimraf": "^6.0.1",
-    "tsup": "^8.4.0",
-    "typescript": "^5.8.2",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^2.1.9"
   },
@@ -110,8 +110,8 @@
     "better-auth": "^1.0.3"
   },
   "dependencies": {
-    "libphonenumber-js": "^1.12.5",
-    "mailchecker": "^6.0.16",
-    "validator": "^13.12.0"
+    "libphonenumber-js": "^1.12.8",
+    "mailchecker": "^6.0.17",
+    "validator": "^13.15.15"
   }
 }

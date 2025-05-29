@@ -83,6 +83,7 @@ export default tseslint.config(
     languageOptions: {
       parserOptions: {
         projectService: true,
+        // eslint-disable-next-line n/no-unsupported-features/node-builtins -- dev in Node >22
         tsconfigRootDir: import.meta.dirname
       }
     }

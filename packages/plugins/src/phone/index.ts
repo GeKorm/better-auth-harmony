@@ -97,7 +97,8 @@ const phoneHarmony = ({
   extract = true,
   acceptRawInputOnError = false,
   matchers = [allPhone],
-  normalizer
+  normalizer = (text: string) =>
+    parsePhoneNumberWithError(text, { defaultCountry, defaultCallingCode, extract }).number
 }: PhoneHarmonyOptions = {}): BetterAuthPlugin =>
   ({
     id: 'harmony-phone-number',
@@ -111,17 +112,10 @@ const phoneHarmony = ({
 
             if (typeof phoneNumber !== 'string') return;
 
-            let normalize = normalizer;
-            if (!normalize) {
-              normalize = (text: string) =>
-                parsePhoneNumberWithError(text, { defaultCountry, defaultCallingCode, extract })
-                  .number;
-            }
-
             let normalizedPhone = phoneNumber;
 
             try {
-              normalizedPhone = await normalize(phoneNumber, ctx.request);
+              normalizedPhone = await normalizer(phoneNumber, ctx.request);
             } catch (error) {
               if (!acceptRawInputOnError && error instanceof ParseError) {
                 throw new APIError('BAD_REQUEST', { message: error.message });
