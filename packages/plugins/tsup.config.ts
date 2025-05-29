@@ -57,6 +57,13 @@ export default defineConfig(() => ({
   },
   format: ['esm', 'cjs'],
   bundle: true,
+  clean: true,
+  dts: true,
+  minify: true,
+  tsconfig: 'tsconfig.build.json',
+  treeshake: {
+    preset: 'smallest'
+  },
   splitting: false,
   cjsInterop: true,
   esbuildPlugins: [

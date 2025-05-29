@@ -8,7 +8,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit --project tsconfig.build.json",
     "emit-types": "rimraf -g dist/**/*{.ts,.ts.map}; tsc --emitDeclarationOnly --declaration --project tsconfig.build.json",
-    "build": "tsup --clean --dts --minify --tsconfig tsconfig.build.json",
+    "build": "tsup",
     "test": "vitest run --coverage --coverage.include=src",
     "test:watch": "vitest"
   },
