@@ -1,5 +1,12 @@
 # @repo/tsconfig
 
+## 0.0.5
+
+### Patch Changes
+
+- [`db5178a`](https://github.com/GeKorm/better-auth-harmony/commit/db5178ac9c388202394c049dc75a3d3b5d786121)
+  Thanks [@GeKorm](https://github.com/GeKorm)! - Upgrade dependencies
+
 ## 0.0.4
 
 ### Patch Changes

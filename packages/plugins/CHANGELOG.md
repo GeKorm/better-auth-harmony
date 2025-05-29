@@ -1,5 +1,15 @@
 # better-auth-harmony
 
+## 1.2.5
+
+### Patch Changes
+
+- [`47655bc`](https://github.com/GeKorm/better-auth-harmony/commit/47655bca0df8e69f14f5e85cd5f18dad7305ab83)
+  Thanks [@GeKorm](https://github.com/GeKorm)! - Reduce bundle size with improved tree-shaking
+
+- [`db5178a`](https://github.com/GeKorm/better-auth-harmony/commit/db5178ac9c388202394c049dc75a3d3b5d786121)
+  Thanks [@GeKorm](https://github.com/GeKorm)! - Upgrade dependencies
+
 ## 1.2.4
 
 ### Patch Changes
