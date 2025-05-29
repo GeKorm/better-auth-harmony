@@ -19,7 +19,7 @@
     "lint:root": "CHECK_REDOS=true eslint .",
     "emit-types": "turbo run emit-types --concurrency=100% --cache-dir=.turbo",
     "typecheck": "turbo run typecheck --concurrency=100% --cache-dir=.turbo",
-    "release": "turbo run build --cache-dir=.turbo && yarn workspaces foreach -A -p -j unlimited --no-private npm publish --tolerate-republish",
+    "release": "turbo run build --cache-dir=.turbo && yarn workspaces foreach -A -p -j unlimited --no-private npm publish --tolerate-republish && changeset tag",
     "format": "prettier --write \"**/*.{cjs,js,mjs,ts,tsx,md,json}\""
   },
   "devDependencies": {

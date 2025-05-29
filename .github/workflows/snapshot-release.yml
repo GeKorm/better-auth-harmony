@@ -35,6 +35,7 @@ jobs:
     environment: production
     permissions:
       id-token: write
+      attestations: write
       contents: write
       pull-requests: write
     if: |

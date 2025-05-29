@@ -30,6 +30,10 @@
   "bugs": {
     "url": "https://github.com/gekorm/better-auth-harmony/issues"
   },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "exports": {
