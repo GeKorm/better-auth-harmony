@@ -1,5 +1,13 @@
 # better-auth-harmony
 
+## 1.2.6
+
+### Patch Changes
+
+- [#38](https://github.com/GeKorm/better-auth-harmony/pull/38)
+  [`7e14b96`](https://github.com/GeKorm/better-auth-harmony/commit/7e14b96adaf6d00f67c8e52a453098e009674dd9)
+  Thanks [@GeKorm](https://github.com/GeKorm)! - Fix incorrect cjs import of validator library
+
 ## 1.2.5
 
 ### Patch Changes
