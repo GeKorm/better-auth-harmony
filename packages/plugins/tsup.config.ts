@@ -43,8 +43,15 @@ const convertToCjsImports = (contents: string) =>
   contents.replaceAll(
     validatorImport,
     // eslint-disable-next-line @typescript-eslint/no-inferrable-types -- broken
-    (_, quote: string, importPath: string, es: string, semi: string = '') =>
-      `${quote}${importPath}${quote}${semi}`.replace(es, '')
+    (_, quote: string, importPath: string, es: string, semi: string = '') => {
+      const outExtension = '.js';
+      // If the import path already ends with '.js', leave it as is.
+      const result = importPath.endsWith(outExtension)
+        ? `${quote}${importPath}${quote}${semi}`
+        : `${quote}${importPath}${outExtension}${quote}${semi}`;
+
+      return result.replace(es, '');
+    }
   );
 
 export default defineConfig(() => ({
@@ -71,11 +78,10 @@ export default defineConfig(() => ({
       name: 'fix-validator-import',
       setup(build) {
         build.onEnd((result) => {
-          // Determine if the output format is ESM (ECMAScript Module).
-          const isEsm = build.initialOptions.format === 'esm';
-
           // Determine the output file extension based on the build options.
           const outExtension = build.initialOptions.outExtension?.['.js'] ?? '.js';
+          // Determine if the output format is ESM (ECMAScript Module).
+          const isEsm = outExtension !== '.cjs';
 
           // If there are build errors, do not proceed.
           if (result.errors.length > 0) {
