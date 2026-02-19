@@ -1,5 +1,5 @@
 import { type HookEndpointContext } from 'better-auth';
-import { APIError, createAuthMiddleware} from 'better-auth/api';
+import { APIError, createAuthMiddleware } from 'better-auth/api';
 import {
   type CountryCode,
   type E164Number,

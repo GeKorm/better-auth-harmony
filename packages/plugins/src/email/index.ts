@@ -1,5 +1,5 @@
 import { type User } from 'better-auth';
-import { APIError, createAuthMiddleware} from 'better-auth/api';
+import { APIError, createAuthMiddleware } from 'better-auth/api';
 import { type BetterAuthPlugin } from 'better-auth/types';
 import Mailchecker from 'mailchecker';
 import isEmail from 'validator/es/lib/isEmail';
