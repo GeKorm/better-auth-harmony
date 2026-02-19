@@ -4,6 +4,8 @@ export type Matcher = (context: HookEndpointContext) => boolean;
 
 const phonePaths = new Set([
   '/sign-in/phone-number',
+  '/phone-number/request-password-reset',
+  // TODO: Deprecated, remove in major semver
   '/phone-number/forget-password',
   '/phone-number/reset-password',
   '/phone-number/send-otp',
@@ -17,7 +19,7 @@ const phonePaths = new Set([
  * @param context.path Request path
  * @returns boolean
  */
-export const allPhone: Matcher = ({ path }) => phonePaths.has(path);
+export const allPhone: Matcher = ({ path }) => typeof path === 'string' && phonePaths.has(path);
 
 /**
  * Path is `'/sign-in/phone-number'`.
@@ -44,12 +46,13 @@ export const phoneOtp: Matcher = ({ path }) => path === '/phone-number/send-otp'
 export const phoneVerify: Matcher = ({ path }) => path === '/phone-number/verify';
 
 /**
- * Path is `'/phone-number/forget-password'`.
+ * Path is `'/phone-number/request-password-reset || '/phone-number/forget-password'`.
  * @param context Request context
  * @param context.path Request path
  * @returns boolean
  */
-export const phoneForget: Matcher = ({ path }) => path === '/phone-number/forget-password';
+export const phoneForget: Matcher = ({ path }) =>
+  path === '/phone-number/request-password-reset' || path === '/phone-number/forget-password';
 
 /**
  * Path is `'/phone-number/reset-password'`.

@@ -89,7 +89,7 @@ jobs:
 
       - name: Checkout head ref (comment trigger)
         if: github.event_name == 'issue_comment'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           # # specify the owner + repository in order to checkout the fork
           # # for community PRs
@@ -101,21 +101,21 @@ jobs:
 
       - name: Checkout head ref (dispatch trigger)
         if: github.event_name == 'workflow_dispatch'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Cache turbo setup
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .turbo
           key: ${{ runner.os }}-turbo-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-turbo-
 
-      - name: Use Node.js 22
-        uses: actions/setup-node@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v6
         with:
           registry-url: 'https://registry.npmjs.org'
-          node-version: 22
+          node-version: 24
 
       - name: 📥 Monorepo install
         uses: ./.github/actions/yarn-nm-install

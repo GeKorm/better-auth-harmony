@@ -1,17 +1,11 @@
 /* eslint-disable n/no-unsupported-features/node-builtins -- allow in tests */
+import { createAuthClient } from 'better-auth/client';
+import { magicLinkClient } from 'better-auth/client/plugins';
+import { magicLink } from 'better-auth/plugins/magic-link';
+import { getTestInstance } from 'better-auth/test';
 import { afterAll, describe, expect, it, vi } from 'vitest';
-// eslint-disable-next-line import/no-relative-packages -- couldn't find a better way to include it
-import { createAuthClient } from '../../../../better-auth/packages/better-auth/src/client';
-// eslint-disable-next-line import/no-relative-packages -- couldn't find a better way to include it
-import { magicLinkClient } from '../../../../better-auth/packages/better-auth/src/client/plugins';
-// eslint-disable-next-line import/no-relative-packages -- couldn't find a better way to include it
-import { magicLink } from '../../../../better-auth/packages/better-auth/src/plugins/magic-link';
-// eslint-disable-next-line import/no-relative-packages -- couldn't find a better way to include it
-import { getTestInstance } from '../../../../better-auth/packages/better-auth/src/test-utils/test-instance';
 import emailHarmony, { type UserWithNormalizedEmail } from '.';
 import { emailSignIn, emailSignUp, magicLinkSignIn } from './matchers';
-// eslint-disable-next-line import/no-relative-packages -- couldn't find a better way to include it
-import type { BetterAuthPlugin } from '../../../../better-auth/packages/better-auth/src/types';
 
 interface VerificationEmail {
   email: string;
@@ -40,7 +34,7 @@ describe('magic link harmony', async () => {
             validation: matchers,
             signIn: matchers.slice(1)
           }
-        }) as BetterAuthPlugin,
+        }),
         magicLink({
           // eslint-disable-next-line @typescript-eslint/require-await -- better-auth types
           async sendMagicLink(data) {
@@ -68,7 +62,9 @@ describe('magic link harmony', async () => {
   });
 
   afterAll(async () => {
-    await (auth.options.database as unknown as SQLiteDB).close();
+    if ('database' in auth.options) {
+      await (auth.options.database as SQLiteDB).close();
+    }
   });
 
   it('should reject temporary emails', async () => {
@@ -286,7 +282,9 @@ describe('magic link verify', async () => {
   });
 
   afterAll(async () => {
-    await (auth.options.database as unknown as SQLiteDB).close();
+    if ('database' in auth.options) {
+      await (auth.options.database as SQLiteDB).close();
+    }
   });
 
   it('should verify last magic link', async () => {

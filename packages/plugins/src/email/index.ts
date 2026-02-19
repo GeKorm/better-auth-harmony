@@ -84,7 +84,7 @@ const emailHarmony = ({
   validator = validateEmail,
   matchers = {},
   normalizer = normalizeEmail
-}: EmailHarmonyOptions = {}): BetterAuthPlugin =>
+}: EmailHarmonyOptions = {}) =>
   ({
     id: 'harmony-email',
     init() {

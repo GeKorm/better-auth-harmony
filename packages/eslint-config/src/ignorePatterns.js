@@ -1,6 +1,7 @@
 const ignorePatterns = [
   '!.eslintrc.cjs',
   '!eslint.config.js',
+  '!.github/',
   'node_modules',
   '.pnp',
   '.pnp.js',
@@ -14,6 +15,7 @@ const ignorePatterns = [
   '.turbo',
   '.vercel',
   '.pnp.*',
+  '.idea/*',
   '.yarn/*'
 ];
 

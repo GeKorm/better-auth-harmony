@@ -2,9 +2,8 @@
 import { createAuthClient } from 'better-auth/client';
 import { phoneNumberClient } from 'better-auth/client/plugins';
 import { phoneNumber } from 'better-auth/plugins';
+import { getTestInstance } from 'better-auth/test';
 import { afterAll, describe, expect, it, vi } from 'vitest';
-// eslint-disable-next-line import/no-relative-packages -- couldn't find a better way to include it
-import { getTestInstance } from '../../../../better-auth/packages/better-auth/src/test-utils/test-instance';
 import emailHarmony, { type UserWithNormalizedEmail } from '.';
 import {
   allEmail,
@@ -14,8 +13,6 @@ import {
   emailSendVerification,
   emailSignUp
 } from './matchers';
-// eslint-disable-next-line import/no-relative-packages -- couldn't find a better way to include it
-import type { BetterAuthPlugin } from '../../../../better-auth/packages/better-auth/src/types';
 
 interface SQLiteDB {
   close: () => Promise<void>;
@@ -41,7 +38,7 @@ describe('email harmony', async () => {
             signIn: [emailForget, allEmailSignIn, emailSignUp],
             validation: [emailForget, allEmail]
           }
-        }) as BetterAuthPlugin
+        })
       ]
     },
     {
@@ -50,8 +47,9 @@ describe('email harmony', async () => {
   );
 
   afterAll(async () => {
-    // TODO: Open PR for better-auth/src/test-utils/test-instance
-    await (auth.options.database as unknown as SQLiteDB).close();
+    if ('database' in auth.options) {
+      await (auth.options.database as SQLiteDB).close();
+    }
   });
 
   describe('signup', () => {
@@ -155,7 +153,7 @@ describe('email harmony', async () => {
         password: 'new-password',
         name: 'new-name'
       });
-      await client.forgetPassword({
+      await client.requestPasswordReset({
         email: 'e.mail@googlemail.com'
       });
       expect(token.length).toBeGreaterThan(10);
@@ -174,10 +172,10 @@ describe('Email Verification', async () => {
         requireEmailVerification: true
       },
       emailVerification: {
-        // eslint-disable-next-line @typescript-eslint/require-await -- better-auth types
+        autoSignInAfterVerification: true,
         async sendVerificationEmail({ user, url, token: _token }) {
           token = _token;
-          mockSendEmail(user.email, url);
+          await mockSendEmail(user.email, url);
         }
       },
       plugins: [
@@ -187,7 +185,7 @@ describe('Email Verification', async () => {
             signIn: [emailSendVerification, allEmailSignIn],
             validation: [emailSendVerification, allEmail]
           }
-        }) as BetterAuthPlugin
+        })
       ]
     },
     {
@@ -196,7 +194,9 @@ describe('Email Verification', async () => {
   );
 
   afterAll(async () => {
-    await (auth.options.database as unknown as SQLiteDB).close();
+    if ('database' in auth.options) {
+      await (auth.options.database as SQLiteDB).close();
+    }
   });
 
   it('should send a verification email to a normalized address form', async () => {
@@ -206,11 +206,7 @@ describe('Email Verification', async () => {
       password: 'new-password',
       name: 'new-name'
     });
-    await auth.api.sendVerificationEmail({
-      body: {
-        email: 'e.mail+example@gmail.com'
-      }
-    });
+
     expect(mockSendEmail).toHaveBeenCalledWith(email, expect.any(String));
   });
 
@@ -225,9 +221,8 @@ describe('Email Verification', async () => {
 });
 
 describe('email harmony with email change', async () => {
-  const sendChangeEmail = vi.fn();
-  // eslint-disable-next-line no-underscore-dangle -- unused var
-  let _emailVerificationToken = '';
+  const mockSendEmail = vi.fn();
+  let token = '';
 
   const { client, sessionSetter, db, auth } = await getTestInstance(
     {
@@ -238,21 +233,22 @@ describe('email harmony with email change', async () => {
             validation: [changeEmail, allEmail],
             signIn: [changeEmail, allEmailSignIn]
           }
-        }) as BetterAuthPlugin
+        })
       ],
+      emailAndPassword: {
+        enabled: true,
+        requireEmailVerification: true
+      },
       emailVerification: {
         // eslint-disable-next-line @typescript-eslint/require-await -- better-auth types
-        async sendVerificationEmail({ token }) {
-          _emailVerificationToken = token;
+        async sendVerificationEmail({ token: _token }) {
+          token = _token;
+          mockSendEmail();
         }
       },
       user: {
         changeEmail: {
-          enabled: true,
-          // eslint-disable-next-line @typescript-eslint/require-await -- better-auth types
-          sendChangeEmailVerification: async ({ user, newEmail, url, token }) => {
-            sendChangeEmail(user, newEmail, url, token);
-          }
+          enabled: true
         }
       }
     },
@@ -270,10 +266,21 @@ describe('email harmony with email change', async () => {
     password,
     name: 'new-name'
   });
+  await client.verifyEmail({
+    query: {
+      token
+    }
+  });
+
   await client.signUp.email({
     email: 'some.user+test@googlemail.com',
     password,
     name: 'new-name'
+  });
+  await client.verifyEmail({
+    query: {
+      token
+    }
   });
 
   const session = await client.signIn.email({
@@ -292,7 +299,9 @@ describe('email harmony with email change', async () => {
   }
 
   afterAll(async () => {
-    await (auth.options.database as unknown as SQLiteDB).close();
+    if ('database' in auth.options) {
+      await (auth.options.database as SQLiteDB).close();
+    }
   });
 
   it('normalizes new address', async () => {
@@ -303,7 +312,15 @@ describe('email harmony with email change', async () => {
         headers
       }
     });
-    const { user } = await client.getSession({
+
+    // Verify new email
+    await client.verifyEmail({
+      query: {
+        token
+      }
+    });
+
+    const current = await client.getSession({
       fetchOptions: {
         headers,
         throw: true
@@ -320,7 +337,7 @@ describe('email harmony with email change', async () => {
       ]
     });
 
-    expect(user.email).toBe(newEmailRaw);
+    expect(current?.user.email).toBe(newEmailRaw);
     expect(dbUser?.email).toBe(newEmailRaw);
   });
 
@@ -349,10 +366,15 @@ describe('email harmony with email change', async () => {
 
   it('should prevent changing into email variations of existing addresses', async () => {
     // Attempt to duplicate email
-    const { error } = await client.changeEmail({
+    await client.changeEmail({
       newEmail: 'so.me.use.r+test2@googlemail.com',
       fetchOptions: {
         headers
+      }
+    });
+    const { error } = await client.verifyEmail({
+      query: {
+        token
       }
     });
 
@@ -386,7 +408,7 @@ describe('combined with phone number plugin', async () => {
             }
           }
         }),
-        emailHarmony({ allowNormalizedSignin: true }) as BetterAuthPlugin
+        emailHarmony({ allowNormalizedSignin: true })
       ]
     },
     {
@@ -395,7 +417,9 @@ describe('combined with phone number plugin', async () => {
   );
 
   afterAll(async () => {
-    await (auth.options.database as unknown as SQLiteDB).close();
+    if ('database' in auth.options) {
+      await (auth.options.database as SQLiteDB).close();
+    }
   });
 
   const client = createAuthClient({

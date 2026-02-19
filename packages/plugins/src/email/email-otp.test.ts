@@ -1,13 +1,8 @@
 /* eslint-disable no-await-in-loop -- copied from better-auth */
+import { emailOTPClient } from 'better-auth/client/plugins';
+import { bearer, emailOTP } from 'better-auth/plugins';
+import { getTestInstance } from 'better-auth/test';
 import { afterAll, describe, expect, it, vi } from 'vitest';
-// eslint-disable-next-line import/no-relative-packages -- couldn't find a better way to include it
-import { bearer } from '../../../../better-auth/packages/better-auth/src/plugins/bearer';
-// eslint-disable-next-line import/no-relative-packages -- couldn't find a better way to include it
-import { emailOTP } from '../../../../better-auth/packages/better-auth/src/plugins/email-otp';
-// eslint-disable-next-line import/no-relative-packages -- couldn't find a better way to include it
-import { emailOTPClient } from '../../../../better-auth/packages/better-auth/src/plugins/email-otp/client';
-// eslint-disable-next-line import/no-relative-packages -- couldn't find a better way to include it
-import { getTestInstance } from '../../../../better-auth/packages/better-auth/src/test-utils/test-instance';
 import emailHarmony, { type UserWithNormalizedEmail } from '.';
 import {
   emailOtpCreateVerification,
@@ -19,8 +14,6 @@ import {
   emailSignIn,
   emailSignUp
 } from './matchers';
-// eslint-disable-next-line import/no-relative-packages -- couldn't find a better way to include it
-import type { BetterAuthPlugin } from '../../../../better-auth/packages/better-auth/src/types';
 
 // TODO: Normalization check, validation check
 interface SQLiteDB {
@@ -44,7 +37,7 @@ describe('email-otp', async () => {
   const { client, auth, db } = await getTestInstance(
     {
       plugins: [
-        bearer() as BetterAuthPlugin,
+        bearer(),
         emailOTP({
           // eslint-disable-next-line @typescript-eslint/require-await -- better-auth types
           async sendVerificationOTP({ email, otp: _otp, type }) {
@@ -53,7 +46,7 @@ describe('email-otp', async () => {
           },
           sendVerificationOnSignUp: true
         }),
-        emailHarmony({ allowNormalizedSignin: true }) as BetterAuthPlugin
+        emailHarmony({ allowNormalizedSignin: true })
       ],
       emailVerification: {
         autoSignInAfterVerification: true
@@ -77,7 +70,9 @@ describe('email-otp', async () => {
   if (!testUser) throw new Error('User not found');
 
   afterAll(async () => {
-    await (auth.options.database as unknown as SQLiteDB).close();
+    if ('database' in auth.options) {
+      await (auth.options.database as SQLiteDB).close();
+    }
   });
 
   it('should verify email with otp', async () => {
@@ -287,8 +282,8 @@ describe('email-otp', async () => {
   });
 
   it('should reject verification otp creation for disposable address', async () => {
-    await expect(() =>
-      auth.api.createVerificationOTP({
+    await expect(
+      auth.api.sendVerificationOTP({
         body: {
           type: 'sign-in',
           email: 'test@mailinator.com'
@@ -309,16 +304,14 @@ describe('email-otp', async () => {
   });
 
   it('should work with custom options', async () => {
-    const { client: customClient } = await getTestInstance(
+    const { client: customClient, testUser: customTestUser } = await getTestInstance(
       {
         plugins: [
-          emailHarmony({ allowNormalizedSignin: true }) as BetterAuthPlugin,
           bearer(),
           emailOTP({
-            // eslint-disable-next-line @typescript-eslint/require-await -- better-auth types
             async sendVerificationOTP({ email, otp: _otp, type }) {
               otp = _otp;
-              otpFn(email, _otp, type);
+              await otpFn(email, _otp, type);
             },
             sendVerificationOnSignUp: true,
             expiresIn: 10,
@@ -330,7 +323,6 @@ describe('email-otp', async () => {
         }
       },
       {
-        disableTestUser: true,
         clientOptions: {
           plugins: [emailOTPClient()]
         }
@@ -344,21 +336,10 @@ describe('email-otp', async () => {
     vi.useFakeTimers();
     await vi.advanceTimersByTimeAsync(11 * 1000);
     const verifyRes = await customClient.emailOtp.verifyEmail({
-      email: testUser.email,
+      email: customTestUser.email,
       otp
     });
-    // expect(verifyRes.error?.code).toBe('OTP_EXPIRED');
-    const dbUser = await db.findOne<UserWithNormalizedEmail>({
-      model: 'user',
-      where: [
-        {
-          field: 'normalizedEmail',
-          value: 'example@gmail.com'
-        }
-      ]
-    });
-    expect(dbUser?.email).toBe(testUser.email);
-    expect(verifyRes.error).toBeTruthy();
+    expect(verifyRes.error?.code).toBe('OTP_EXPIRED');
   });
 }, 15_000);
 
@@ -374,7 +355,7 @@ describe('email-otp-verify with custom matchers', async () => {
             validation: matchers,
             signIn: matchers.slice(1)
           }
-        }) as BetterAuthPlugin,
+        }),
         emailOTP({
           // eslint-disable-next-line @typescript-eslint/require-await -- better-auth types
           async sendVerificationOTP({ email, otp: _otp, type }) {
@@ -404,36 +385,45 @@ describe('email-otp-verify with custom matchers', async () => {
   if (!testUser) throw new Error('User not found');
 
   afterAll(async () => {
-    await (auth.options.database as unknown as SQLiteDB).close();
+    if ('database' in auth.options) {
+      await (auth.options.database as SQLiteDB).close();
+    }
   });
 
   it('should not create verification otp when disableSignUp and user not registered', async () => {
-    for (const param of [
-      {
-        email: 'test-email@gmail.com',
-        isNull: true
-      },
-      {
-        email: testUser.email,
-        isNull: false
-      }
-    ]) {
-      await client.emailOtp.sendVerificationOtp({
-        email: param.email,
+    const param1 = {
+      email: 'test-email@gmail.com',
+      isNull: true
+    };
+
+    const param2 = {
+      email: testUser.email,
+      isNull: false
+    };
+
+    await client.emailOtp.sendVerificationOtp({
+      email: param1.email,
+      type: 'email-verification'
+    });
+    const res = await auth.api.getVerificationOTP({
+      query: {
+        email: param1.email,
         type: 'email-verification'
-      });
-      const res = await auth.api.getVerificationOTP({
-        query: {
-          email: param.email,
-          type: 'email-verification'
-        }
-      });
-      if (param.isNull) {
-        expect(res.otp).toBeNull();
-      } else {
-        expect(res.otp).not.toBeNull();
       }
-    }
+    });
+    expect(res.otp).toBeNull();
+
+    await client.emailOtp.sendVerificationOtp({
+      email: param2.email,
+      type: 'email-verification'
+    });
+    const res2 = await auth.api.getVerificationOTP({
+      query: {
+        email: param2.email,
+        type: 'email-verification'
+      }
+    });
+    expect(res2.otp).not.toBeNull();
   });
 
   it('should not send verification otp when address is disposable', async () => {
@@ -473,7 +463,7 @@ describe('custom rate limiting storage', async () => {
         enabled: true
       },
       plugins: [
-        emailHarmony({ allowNormalizedSignin: true }) as BetterAuthPlugin,
+        emailHarmony({ allowNormalizedSignin: true }),
         emailOTP({
           async sendVerificationOTP() {}
         })
@@ -485,7 +475,9 @@ describe('custom rate limiting storage', async () => {
   );
 
   afterAll(async () => {
-    await (auth.options.database as unknown as SQLiteDB).close();
+    if ('database' in auth.options) {
+      await (auth.options.database as SQLiteDB).close();
+    }
   });
 
   it.each([
@@ -516,9 +508,7 @@ describe('custom rate limiting storage', async () => {
         method: 'POST',
         body
       });
-      if (i >= 3) {
-        expect(response.error?.status).toBe(429);
-      }
+      expect(i < 3 || response.error?.status === 429).toBeTruthy();
     }
     vi.useFakeTimers();
     await vi.advanceTimersByTimeAsync(60 * 1000);

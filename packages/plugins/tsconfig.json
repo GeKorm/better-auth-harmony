@@ -1,4 +1,4 @@
 {
   "extends": "@repo/tsconfig/eslint.json",
-  "exclude": ["node_modules", "${configDir}/dist", "${configDir}/packages", "../../better-auth"]
+  "exclude": ["node_modules", "${configDir}/dist", "${configDir}/packages"]
 }

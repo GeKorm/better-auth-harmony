@@ -4,7 +4,7 @@
  */
 function banImportExtension(extension) {
   const message = `Unexpected use of file extension (.${extension}) in import`;
-  const literalAttributeMatcher = `Literal[value=/\\.${extension}$/]`;
+  const literalAttributeMatcher = String.raw`Literal[value=/\.${extension}$/]`;
   return [
     {
       // import foo from 'bar.js';
