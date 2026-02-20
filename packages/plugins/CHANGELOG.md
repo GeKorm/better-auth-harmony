@@ -1,5 +1,26 @@
 # better-auth-harmony
 
+## 1.3.0
+
+### Minor Changes
+
+- Match new API paths
+  _[`7a493c4`](https://github.com/gekorm/better-auth-harmony/commit/7a493c454c69ee846015b4967f7fd529671a305b)
+  [@GeKorm](https://github.com/GeKorm)_
+
+### Patch Changes
+
+- Fix incorrect cjs import of validator library
+  _[`#38`](https://github.com/GeKorm/better-auth-harmony/pull/38)
+  [`7e14b96`](https://github.com/gekorm/better-auth-harmony/commit/7e14b96adaf6d00f67c8e52a453098e009674dd9)
+  [@GeKorm](https://github.com/GeKorm)_
+- Upgrade dependencies
+  _[`7a493c4`](https://github.com/gekorm/better-auth-harmony/commit/7a493c454c69ee846015b4967f7fd529671a305b)
+  [@GeKorm](https://github.com/GeKorm)_
+- Fix compatibility with better-auth 1.5.0
+  _[`d56b5c5`](https://github.com/gekorm/better-auth-harmony/commit/d56b5c5485e3aa72f6c72589260284e0a6f45771)
+  [@GeKorm](https://github.com/GeKorm)_
+
 ## 1.2.5
 
 ### Patch Changes
