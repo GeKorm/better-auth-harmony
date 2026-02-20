@@ -1,5 +1,13 @@
 # @repo/eslint-config
 
+## 0.0.12
+
+### Patch Changes
+
+- Upgrade dependencies
+  _[`7a493c4`](https://github.com/gekorm/better-auth-harmony/commit/7a493c454c69ee846015b4967f7fd529671a305b)
+  [@GeKorm](https://github.com/GeKorm)_
+
 ## 0.0.11
 
 ### Patch Changes
