@@ -4,7 +4,6 @@
     "node_modules",
     "${configDir}/dist",
     "${configDir}/packages",
-    "${configDir}/src/**/*.test.ts",
-    "../../better-auth"
+    "${configDir}/src/**/*.test.ts"
   ]
 }

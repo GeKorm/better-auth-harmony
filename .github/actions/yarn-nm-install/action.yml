@@ -8,7 +8,7 @@
 #      - name: 📥 Monorepo install                                                     #
 #        uses: ./.github/actions/yarn-nm-install                                       #
 #        with:                                                                         #
-#          enable-corepack: false                   # (default = 'true')              #
+#          enable-corepack: false                   # (default = 'false')              #
 #          cwd: ${{ github.workspace }}/apps/my-app # (default = '.')                  #
 #          cache-prefix: add cache key prefix       # (default = 'default')            #
 #          cache-node-modules: false                # (default = 'false')              #
@@ -59,7 +59,7 @@ inputs:
   enable-corepack:
     description: Enable corepack
     required: false
-    default: 'true'
+    default: 'false'
 
 runs:
   using: composite
@@ -71,23 +71,24 @@ runs:
       working-directory: ${{ inputs.cwd }}
       run: corepack enable
 
-    - name: ⚙️ Expose yarn config as "$GITHUB_OUTPUT"
+    - name: ⚙️ Expose yarn config as "$GITHUB_ENV"
       id: yarn-config
       shell: bash
       working-directory: ${{ inputs.cwd }}
       env:
         YARN_ENABLE_GLOBAL_CACHE: 'false'
       run: |
-        echo "CACHE_FOLDER=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
-        echo "CURRENT_NODE_VERSION="node-$(node --version)"" >> $GITHUB_OUTPUT
-        echo "CURRENT_BRANCH=$(echo ${GITHUB_REF#refs/heads/} | sed -r 's,/,-,g')" >> $GITHUB_OUTPUT
-        echo "NPM_GLOBAL_CACHE_FOLDER=$(npm config get cache)" >> $GITHUB_OUTPUT
+        echo "CACHE_FOLDER=$(yarn config get cacheFolder)" >> $GITHUB_ENV
+        echo "CURRENT_NODE_VERSION="node-$(node --version)"" >> $GITHUB_ENV
+        echo "CURRENT_BRANCH=$(echo ${GITHUB_REF#refs/heads/} | sed -r 's,/,-,g')" >> $GITHUB_ENV
+        echo "NPM_GLOBAL_CACHE_FOLDER=$(npm config get cache)" >> $GITHUB_ENV
+        echo "CURRENT_DIR=$(pwd)" >> $GITHUB_ENV
 
     - name: ♻️ Restore yarn cache
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       id: yarn-download-cache
       with:
-        path: ${{ steps.yarn-config.outputs.CACHE_FOLDER }}
+        path: ${{ env.CACHE_FOLDER }}
         key:
           yarn-download-cache-${{ inputs.cache-prefix }}-${{ hashFiles(format('{0}/yarn.lock',
           inputs.cwd), format('{0}/.yarnrc.yml', inputs.cwd)) }}
@@ -97,37 +98,35 @@ runs:
     - name: ♻️ Restore node_modules
       if: inputs.cache-node-modules == 'true'
       id: yarn-nm-cache
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ${{ inputs.cwd }}/**/node_modules
         key:
-          yarn-nm-cache-${{ inputs.cache-prefix }}-${{ runner.os }}-${{
-          steps.yarn-config.outputs.CURRENT_NODE_VERSION }}-${{
-          steps.yarn-config.outputs.CURRENT_BRANCH }}-${{ hashFiles(format('{0}/yarn.lock',
-          inputs.cwd), format('{0}/.yarnrc.yml', inputs.cwd)) }}
+          yarn-nm-cache-${{ inputs.cache-prefix }}-${{ runner.os }}-${{ env.CURRENT_NODE_VERSION
+          }}-${{ env.CURRENT_BRANCH }}-${{ hashFiles(format('{0}/yarn.lock', inputs.cwd),
+          format('{0}/.yarnrc.yml', inputs.cwd)) }}
 
     - name: ♻️ Restore global npm cache folder
       if: inputs.cache-npm-cache == 'true'
       id: npm-global-cache
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
-        path: ${{ steps.yarn-config.outputs.NPM_GLOBAL_CACHE_FOLDER }}
+        path: ${{ env.NPM_GLOBAL_CACHE_FOLDER }}
         key:
-          npm-global-cache-${{ inputs.cache-prefix }}-${{ runner.os }}-${{
-          steps.yarn-config.outputs.CURRENT_NODE_VERSION }}-${{ hashFiles(format('{0}/yarn.lock',
-          inputs.cwd), format('{0}/.yarnrc.yml', inputs.cwd)) }}
+          npm-global-cache-${{ inputs.cache-prefix }}-${{ runner.os }}-${{ env.CURRENT_NODE_VERSION
+          }}-${{ hashFiles(format('{0}/yarn.lock', inputs.cwd), format('{0}/.yarnrc.yml',
+          inputs.cwd)) }}
 
     - name: ♻️ Restore yarn install state
       if: inputs.cache-install-state == 'true' && inputs.cache-node-modules == 'true'
       id: yarn-install-state-cache
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
-        path: ${{ inputs.cwd }}/.yarn/ci-cache
+        path: ${{ env.CURRENT_DIR }}/.yarn/ci-cache
         key:
           yarn-install-state-cache-${{ inputs.cache-prefix }}-${{ runner.os }}-${{
-          steps.yarn-config.outputs.CURRENT_NODE_VERSION }}-${{
-          steps.yarn-config.outputs.CURRENT_BRANCH }}-${{ hashFiles(format('{0}/yarn.lock',
-          inputs.cwd), format('{0}/.yarnrc.yml', inputs.cwd)) }}
+          env.CURRENT_NODE_VERSION }}-${{ hashFiles(format('{0}/yarn.lock', inputs.cwd),
+          format('{0}/.yarnrc.yml', inputs.cwd)) }}
 
     - name: 📥 Install dependencies
       shell: bash

@@ -5,7 +5,7 @@ const [_ignores, ...rest] = config;
 
 export default [
   {
-    ignores: [...ignorePatterns, 'better-auth/']
+    ignores: [...ignorePatterns, '!.github']
   },
   ...rest
 ];

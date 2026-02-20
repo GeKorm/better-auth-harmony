@@ -5,6 +5,7 @@ on:
     branches-ignore:
       - 'temp/**'
       - 'backup/**'
+      - 'changeset-release/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -19,23 +20,23 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 2
           submodules: true
 
       - name: Cache turbo setup
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .turbo
           key: ${{ runner.os }}-turbo-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-turbo-
 
-      - name: Use Node.js 22
-        uses: actions/setup-node@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
 
       - name: 📥 Monorepo install
         uses: ./.github/actions/yarn-nm-install
@@ -43,13 +44,6 @@ jobs:
           enable-corepack: true
           cache-node-modules: true
           cache-install-state: true
-
-      - name: Use Latest Corepack # Fix for https://github.com/nodejs/corepack/issues/612
-        run: |
-          npm install -g corepack@latest
-
-      - name: Submodule install
-        run: cd better-auth/ && corepack enable && pnpm i && cd ..
 
       - name: Check prettier styles
         run: yarn stylecheck
@@ -67,22 +61,22 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: true
 
       - name: Cache turbo setup
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .turbo
           key: ${{ runner.os }}-turbo-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-turbo-
 
-      - name: Use Node.js 22
-        uses: actions/setup-node@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
 
       - name: 📥 Monorepo install
         uses: ./.github/actions/yarn-nm-install
@@ -90,13 +84,6 @@ jobs:
           enable-corepack: true
           cache-node-modules: true
           cache-install-state: true
-
-      - name: Use Latest Corepack # Fix for https://github.com/nodejs/corepack/issues/612
-        run: |
-          npm install -g corepack@latest
-
-      - name: Submodule install
-        run: cd better-auth/ && corepack enable && pnpm i && cd ..
 
       - name: Test
         run: yarn test

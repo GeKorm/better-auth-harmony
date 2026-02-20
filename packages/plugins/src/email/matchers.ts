@@ -8,12 +8,16 @@ const paths = [
   '/sign-in/email-otp',
   '/sign-in/magic-link',
   '/sign-in/email',
+  // TODO: Deprecated, remove in major semver
   '/forget-password/email-otp',
+  '/email-otp/request-password-reset',
   '/email-otp/reset-password',
   '/email-otp/create-verification-otp',
   '/email-otp/get-verification-otp',
   '/email-otp/send-verification-otp',
+  // TODO: Deprecated, remove in major semver
   '/forget-password',
+  '/request-password-reset',
   '/send-verification-email',
   '/change-email'
 ];
@@ -28,11 +32,13 @@ const signIn = new Set(paths.slice(1, 12));
  *   '/sign-in/email-otp',
  *   '/sign-in/magic-link',
  *   '/sign-in/email',
+ *   '/email-otp/request-password-reset',
  *   '/forget-password/email-otp',
  *   '/email-otp/reset-password',
  *   '/email-otp/create-verification-otp',
  *   '/email-otp/get-verification-otp',
  *   '/email-otp/send-verification-otp',
+ *   '/request-password-reset',
  *   '/forget-password',
  *   '/send-verification-email',
  *   '/change-email'
@@ -41,7 +47,7 @@ const signIn = new Set(paths.slice(1, 12));
  * @param context.path Request path
  * @returns boolean
  */
-export const allEmail: Matcher = ({ path }) => all.has(path);
+export const allEmail: Matcher = ({ path }) => typeof path === 'string' && all.has(path);
 
 /**
  * Path is one of `[
@@ -49,19 +55,19 @@ export const allEmail: Matcher = ({ path }) => all.has(path);
  *   '/sign-in/email-otp',
  *   '/sign-in/magic-link',
  *   '/sign-in/email',
- *   '/forget-password/email-otp',
+ *   '/email-otp/request-password-reset',
  *   '/email-otp/reset-password',
  *   '/email-otp/create-verification-otp',
  *   '/email-otp/get-verification-otp',
  *   '/email-otp/send-verification-otp',
- *   '/forget-password',
+ *   '/request-password-reset',
  *   '/send-verification-email'
  * ]`.
  * @param context Request context
  * @param context.path Request path
  * @returns boolean
  */
-export const allEmailSignIn: Matcher = ({ path }) => signIn.has(path);
+export const allEmailSignIn: Matcher = ({ path }) => typeof path === 'string' && signIn.has(path);
 
 /**
  * Path is `'/sign-up/email'`.
@@ -80,12 +86,13 @@ export const emailSignUp: Matcher = ({ path }) => path === '/sign-up/email';
 export const emailSignIn: Matcher = ({ path }) => path === '/sign-in/email';
 
 /**
- * Path is `'/forget-password'`, used in the forgot password flow..
+ * Path is `'/request-password-reset' || '/forget-password'`, used in the forgot password flow..
  * @param context Request context
  * @param context.path Request path
  * @returns boolean
  */
-export const emailForget: Matcher = ({ path }) => path === '/forget-password';
+export const emailForget: Matcher = ({ path }) =>
+  path === '/request-password-reset' || path === '/forget-password';
 
 /**
  * Path is `'/send-verification-email'`, used to log the user in.
@@ -113,13 +120,14 @@ export const changeEmail: Matcher = ({ path }) => path === '/change-email';
 export const emailOtpVerify: Matcher = ({ path }) => path === '/email-otp/verify-email';
 
 /**
- * Path is `'/forget-password/email-otp'`, used by the [Email
+ * Path is `'/email-otp/request-password-reset' || '/forget-password/email-otp'`, used by the [Email
  * OTP](https://www.better-auth.com/docs/plugins/email-otp) plugin.
  * @param context Request context
  * @param context.path Request path
  * @returns boolean
  */
-export const emailOtpForget: Matcher = ({ path }) => path === '/forget-password/email-otp';
+export const emailOtpForget: Matcher = ({ path }) =>
+  path === '/email-otp/request-password-reset' || path === '/forget-password/email-otp';
 
 /**
  * Path is `'/email-otp/reset-password'`, used by the [Email
