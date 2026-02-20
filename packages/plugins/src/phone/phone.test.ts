@@ -2,15 +2,12 @@
 import { createAuthClient } from 'better-auth/client';
 import { phoneNumberClient } from 'better-auth/client/plugins';
 import { phoneNumber } from 'better-auth/plugins';
+import { getTestInstance } from 'better-auth/test';
 import { parsePhoneNumberWithError } from 'libphonenumber-js/max';
 import { afterAll, describe, expect, it, vi } from 'vitest';
-// eslint-disable-next-line import/no-relative-packages -- couldn't find a better way to include it
-import { getTestInstance } from '../../../../better-auth/packages/better-auth/src/test-utils/test-instance';
 import emailHarmony from '../email';
 import phoneHarmony from '.';
 import { allPhone, phoneForget, phoneOtp, phoneReset, phoneVerify, signInPhone } from './matchers';
-// eslint-disable-next-line import/no-relative-packages -- couldn't find a better way to include it
-import type { BetterAuthPlugin } from '../../../../better-auth/packages/better-auth/src/types';
 
 // Tests largely copied from
 // https://github.com/better-auth/better-auth/blob/9b00f1e169349b845b8bdafcc4c8359eb7e397fa/packages/better-auth/src/plugins/phone-number/phone-number.test.ts
@@ -37,7 +34,7 @@ describe('phone-number', async () => {
         }),
         phoneHarmony({
           matchers: [signInPhone, phoneOtp, phoneVerify, phoneForget, phoneReset]
-        }) as BetterAuthPlugin
+        })
       ]
     },
     {
@@ -46,7 +43,9 @@ describe('phone-number', async () => {
   );
 
   afterAll(async () => {
-    await (auth.options.database as unknown as SQLiteDB).close();
+    if ('database' in auth.options) {
+      await (auth.options.database as SQLiteDB).close();
+    }
   });
 
   const client = createAuthClient({
@@ -162,11 +161,12 @@ describe('phone auth flow', async () => {
             }
           }
         }),
-        phoneHarmony({ acceptRawInputOnError: true, matchers: [allPhone] }) as BetterAuthPlugin
+        phoneHarmony({ acceptRawInputOnError: true, matchers: [allPhone] })
       ],
       user: {
         changeEmail: {
-          enabled: true
+          enabled: true,
+          updateEmailWithoutVerification: true
         }
       }
     },
@@ -176,7 +176,9 @@ describe('phone auth flow', async () => {
   );
 
   afterAll(async () => {
-    await (auth.options.database as unknown as SQLiteDB).close();
+    if ('database' in auth.options) {
+      await (auth.options.database as SQLiteDB).close();
+    }
   });
 
   const client = createAuthClient({
@@ -217,9 +219,9 @@ describe('phone auth flow', async () => {
         throw: true
       }
     });
-    expect(session.user.phoneNumberVerified).toBe(true);
-    expect(session.user.email).toBe('temp-+15551231234');
-    expect(session.session.token).toBeDefined();
+    expect(session?.user.phoneNumberVerified).toBe(true);
+    expect(session?.user.email).toBe('temp-+15551231234');
+    expect(session?.session.token).toBeDefined();
   });
 
   const headers = new Headers();
@@ -295,7 +297,7 @@ describe('verify phone-number', async () => {
             if (phone === '5') throw new Error('Test'); // to test non-ParseError errors
             return parsePhoneNumberWithError(phone).number;
           }
-        }) as BetterAuthPlugin
+        })
       ]
     },
     {
@@ -304,7 +306,9 @@ describe('verify phone-number', async () => {
   );
 
   afterAll(async () => {
-    await (auth.options.database as unknown as SQLiteDB).close();
+    if ('database' in auth.options) {
+      await (auth.options.database as SQLiteDB).close();
+    }
   });
 
   const client = createAuthClient({
@@ -371,8 +375,8 @@ describe('combined with email harmony', () => {
               }
             }
           }),
-          emailHarmony() as BetterAuthPlugin,
-          phoneHarmony() as BetterAuthPlugin
+          emailHarmony(),
+          phoneHarmony()
         ]
       },
       {
@@ -381,7 +385,9 @@ describe('combined with email harmony', () => {
     );
 
     afterAll(async () => {
-      await (auth.options.database as unknown as SQLiteDB).close();
+      if ('database' in auth.options) {
+        await (auth.options.database as SQLiteDB).close();
+      }
     });
 
     const client = createAuthClient({

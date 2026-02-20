@@ -23,7 +23,7 @@ import * as regexpPlugin from 'eslint-plugin-regexp';
 import security from 'eslint-plugin-security';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import eslintPluginUnicorn from 'eslint-plugin-unicorn';
-import yml from 'eslint-plugin-yml';
+import { configs as ymlConfigs } from 'eslint-plugin-yml';
 import tseslint, { configs as tsConfigs } from 'typescript-eslint';
 import banImportExtension from './src/banImportExtension.js';
 import extraneous from './src/extraneous.js';
@@ -304,7 +304,7 @@ export default tseslint.config(
     ...json.configs.recommended
   },
   {
-    extends: [yml.configs['flat/standard'], yml.configs['flat/prettier']],
+    extends: [ymlConfigs['flat/standard'], ymlConfigs['flat/prettier']],
     files: ['**/*.{yaml,yml}']
   },
   eslintConfigPrettier

@@ -84,7 +84,7 @@ runs:
         echo "NPM_GLOBAL_CACHE_FOLDER=$(npm config get cache)" >> $GITHUB_OUTPUT
 
     - name: ♻️ Restore yarn cache
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       id: yarn-download-cache
       with:
         path: ${{ steps.yarn-config.outputs.CACHE_FOLDER }}
@@ -97,7 +97,7 @@ runs:
     - name: ♻️ Restore node_modules
       if: inputs.cache-node-modules == 'true'
       id: yarn-nm-cache
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ${{ inputs.cwd }}/**/node_modules
         key:
@@ -109,7 +109,7 @@ runs:
     - name: ♻️ Restore global npm cache folder
       if: inputs.cache-npm-cache == 'true'
       id: npm-global-cache
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ${{ steps.yarn-config.outputs.NPM_GLOBAL_CACHE_FOLDER }}
         key:
@@ -120,7 +120,7 @@ runs:
     - name: ♻️ Restore yarn install state
       if: inputs.cache-install-state == 'true' && inputs.cache-node-modules == 'true'
       id: yarn-install-state-cache
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ${{ inputs.cwd }}/.yarn/ci-cache
         key:

@@ -43,17 +43,17 @@ and additional validation, blocking over 55,000 temporary email domains.
   - [Options](#options-1)
   <!-- TOC -->
 
-# Email
+## Email
 
-## Getting Started
+### Getting Started
 
-### 1. Install the plugin
+#### 1. Install the plugin
 
 ```shell
 npm i better-auth-harmony
 ```
 
-### 2. Add the plugin to your auth config
+#### 2. Add the plugin to your auth config
 
 ```typescript
 // auth.ts
@@ -66,7 +66,7 @@ export const auth = betterAuth({
 });
 ```
 
-### 3. Migrate the database
+#### 3. Migrate the database
 
 ```shell
 npx @better-auth/cli migrate
@@ -80,7 +80,7 @@ npx @better-auth/cli generate
 
 See the [Schema](#schema) section to add the fields manually.
 
-## Troubleshooting ESM
+### Troubleshooting ESM
 
 The [validator.js](https://github.com/validatorjs/validator.js) package lacks proper ESM support.
 Please open an issue in this repo if the following workarounds don't help.
@@ -89,12 +89,12 @@ Please open an issue in this repo if the following workarounds don't help.
 
 <summary>Error <code class="notranslate">Error [ERR_MODULE_NOT_FOUND]: Cannot find module</code></summary>
 
-### Next.js
+#### Next.js
 
 Add `better-auth-harmony` to `transpilePackages` in
 [next.config](https://nextjs.org/docs/app/api-reference/config/next-config-js/transpilePackages)
 
-### Vite
+#### Vite
 
 Add `better-auth-harmony` to `ssr.noExternal` in
 [vite.config](https://vite.dev/config/ssr-options#ssr-noexternal)
@@ -105,7 +105,7 @@ Add `better-auth-harmony` to `ssr.noExternal` in
 
 <summary>Error <code class="notranslate">Cannot use import statement outside a module</code></summary>
 
-### Workarounds
+#### Workarounds
 
 - Use NodeJs 22 or higher
 - Or use `NODE_OPTIONS=--experimental-detect-module` for Node >= 20.10
@@ -132,7 +132,7 @@ _validator_'s package.json.
 
 </details>
 
-## Options
+### Options
 
 - `allowNormalizedSignin` (default=**false**) - Allow logging in with any version of the
   unnormalized email address. For example, a user who signed up with the email
@@ -146,7 +146,7 @@ _validator_'s package.json.
 - `matchers` - Customize when to run input `email` validation and normalization. Normalization
   always runs on user creation and update regardless of this setting.
 
-## Schema
+### Schema
 
 The `emailHarmony` plugin requires an additional field in the user table:
 
@@ -159,7 +159,7 @@ the same email address.
 
 ---
 
-# Phone number
+## Phone number
 
 <!-- eslint-disable markdown/no-missing-label-refs -- https://github.com/eslint/markdown/issues/294 -->
 <!-- prettier-ignore -->
@@ -169,15 +169,15 @@ the same email address.
 
 <!-- eslint-enable markdown/no-missing-label-refs -- https://github.com/eslint/markdown/issues/294 -->
 
-## Getting Started
+### Getting Started
 
-### 1. Install the plugin
+#### 1. Install the plugin
 
 ```shell
 npm i better-auth-harmony
 ```
 
-#### 2. Add the plugin to your auth config
+##### 2. Add the plugin to your auth config
 
 ```typescript
 // auth.ts
@@ -195,7 +195,7 @@ See the better-auth
 [`phoneNumber` plugin documentation](https://www.better-auth.com/docs/plugins/phone-number) for
 information on configuring the `phoneNumber()`, including **validation**.
 
-## Options
+### Options
 
 - `defaultCountry` - Default [country](https://www.npmjs.com/package/libphonenumber-js#country-code)
   for numbers written in non-international form (without a `+` sign).
