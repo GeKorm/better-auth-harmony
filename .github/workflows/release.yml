@@ -3,22 +3,26 @@ name: Release
 on:
   push:
     branches:
-      - main
+      - '*'
+      - '**/*'
+  workflow_dispatch: ~
+  issue_comment:
+    types:
+      - created
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 env:
-  YARN_NPM_AUTH_TOKEN: ${{ secrets.YARN_NPM_AUTH_TOKEN }}
-  CHANGESET_PAT: ${{ secrets.CHANGESET_PAT }}
   TURBO_TELEMETRY_DISABLED: true
   DO_NOT_TRACK: true
 
 jobs:
   release:
     name: Release
-    if: github.repository_owner == 'GeKorm'
+    if: |
+      ${{ github.repository_owner == 'GeKorm' && (github.head_ref == 'main' || github.ref_name == 'main')}}
     environment: production
     runs-on: ubuntu-latest
     permissions:
@@ -57,19 +61,144 @@ jobs:
           cache-node-modules: true
           cache-install-state: true
 
-      - name: Work around changeset/corepack ESM
-        run: npm pkg set type=commonjs
-
       - name: Create Release Pull Request or Publish to npm
         id: changesets
-        uses: changesets/action@v1
+        uses: changesets/action@6a0a831ff30acef54f2c6aa1cbbc1096b066edaf
         with:
           # This expects you to have a script called release which does a build for your packages and calls changeset publish
           publish: yarn release
           createGithubReleases: true
+          commitMode: github-api
           commit: Version packages, publish changes
         env:
           # See https://github.com/changesets/action/issues/147
           HOME: ${{ github.workspace }}
-          GITHUB_TOKEN: ${{ secrets.CHANGESET_PAT }}
-          NPM_TOKEN: ${{ secrets.YARN_NPM_AUTH_TOKEN }}
+          # Token has to be different than default
+          GITHUB_TOKEN: ${{ secrets.YARN_NPM_AUTH_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
+          # Configuring provenance (also with --provenance) is theoretically default already with trusted publishing
+
+  snapshot:
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      id-token: write
+      attestations: write
+      contents: write
+      pull-requests: write
+    if: |
+      github.repository == 'gekorm/better-auth-harmony' &&
+      (
+        github.event_name == 'workflow_dispatch' ||
+        (
+          github.event.issue.pull_request &&
+          (
+            github.event.sender.login == 'gekorm'
+          ) &&
+          startsWith(github.event.comment.body, '/release:pr')
+        )
+      )
+    steps:
+      - uses: alessbell/pull-request-comment-branch@ef3408c9757d05f89cb525036383033a313758a0
+        if: github.event_name == 'issue_comment'
+        id: comment-branch
+
+      - name: Get sha
+        if: github.event_name == 'issue_comment'
+        id: parse-sha
+        continue-on-error: true
+        run: |
+          if [ "${{ steps.comment-branch.outputs.head_owner }}" == "gekorm" ]; then
+            echo "sha=${{ steps.comment-branch.outputs.head_sha }}" >> "${GITHUB_OUTPUT}"
+          else
+            sha_from_comment="$(echo $COMMENT_BODY | tr -s ' ' | cut -d ' ' -f2)"
+
+            if [ $sha_from_comment == "/release:pr" ]; then
+              exit 1
+            else
+              echo "sha=$sha_from_comment" >> "${GITHUB_OUTPUT}"
+            fi
+          fi
+        env:
+          COMMENT_BODY: ${{ github.event.comment.body }}
+
+      - name: Comment sha reminder
+        if: steps.parse-sha.outcome == 'failure'
+        uses: peter-evans/create-or-update-comment@e8674b075228eee787fea43ef493e45ece1004c9
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Did you forget to add the sha? Please use `/release:pr <sha>`
+
+      - name: Fail job
+        if: steps.parse-sha.outcome == 'failure'
+        run: |
+          exit 1
+
+      - name: Checkout head ref (comment trigger)
+        if: github.event_name == 'issue_comment'
+        uses: actions/checkout@v6
+        with:
+          # # specify the owner + repository in order to checkout the fork
+          # # for community PRs
+          repository:
+            ${{ steps.comment-branch.outputs.head_owner }}/${{
+            steps.comment-branch.outputs.head_repo }}
+          ref: ${{ steps.parse-sha.outputs.sha }}
+          fetch-depth: 0
+
+      - name: Checkout head ref (dispatch trigger)
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/checkout@v6
+
+      - name: Cache turbo setup
+        uses: actions/cache@v5
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
+      - name: Use Node.js
+        uses: actions/setup-node@v6
+        with:
+          registry-url: 'https://registry.npmjs.org'
+          node-version: 24
+
+      - name: 📥 Monorepo install
+        uses: ./.github/actions/yarn-nm-install
+        with:
+          enable-corepack: true
+          cache-node-modules: true
+          cache-install-state: true
+      # 0.0.0             : to sort lower than any other release
+      # -commit-release   : to sort higher than the already released 0.0.0-commit-<hash>,
+      # .0                : format specifier (if the following identifiers will change format, increase this number)
+      # .%ct              : commit timestamp (to sort releases by commit date, not by hash)
+      # .%h               : commit shorthash
+      - run:
+          echo PKG_VERSION="$(git show --no-patch --format=0.0.0-commit-release.0.%ct.%h)" >>
+          $GITHUB_ENV
+
+      - name: Build
+        run: yarn build
+
+      - name: 'better-auth-harmony: update version'
+        run: |
+          yarn workspace better-auth-harmony exec npm pkg set "version=${{ env.PKG_VERSION }}"
+          yarn workspace better-auth-harmony exec jq '{ version: .version, dependencies: .dependencies, peerDependencies: .peerDependencies }' package.json
+      - name: 'better-auth-harmony: publish'
+        run:
+          yarn workspace better-auth-harmony exec npm publish --access public --tag snapshot
+          --provenance
+        env:
+          NPM_CONFIG_PROVENANCE: true
+
+      - name: Create comment
+        if: github.event_name == 'issue_comment'
+        uses: peter-evans/create-or-update-comment@e8674b075228eee787fea43ef493e45ece1004c9
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            A new release has been made for this PR. You can install the package you need using
+            * `npm i better-auth-harmony@${{ env.PKG_VERSION }}`

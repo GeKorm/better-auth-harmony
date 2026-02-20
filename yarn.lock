@@ -150,17 +150,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@changesets/changelog-github@npm:^0.5.2":
-  version: 0.5.2
-  resolution: "@changesets/changelog-github@npm:0.5.2"
-  dependencies:
-    "@changesets/get-github-info": "npm:^0.7.0"
-    "@changesets/types": "npm:^6.1.0"
-    dotenv: "npm:^8.1.0"
-  checksum: 10c0/c2dbf767f7f18f44539d92f7fd0f42ef6fc33d8f3583a0cd2a558fe8242a4f2db178bf77497c73780652afbae55704b14c32dd33f4d61ebdf28113a0af08f19b
-  languageName: node
-  linkType: hard
-
 "@changesets/cli@npm:^2.29.8":
   version: 2.29.8
   resolution: "@changesets/cli@npm:2.29.8"
@@ -235,13 +224,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@changesets/get-github-info@npm:^0.7.0":
-  version: 0.7.0
-  resolution: "@changesets/get-github-info@npm:0.7.0"
+"@changesets/get-github-info@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "@changesets/get-github-info@npm:0.6.0"
   dependencies:
     dataloader: "npm:^1.4.0"
     node-fetch: "npm:^2.5.0"
-  checksum: 10c0/3a4e497a0d05ea9cb1a17d2193f13d865d2dab8dc6e9162c63c2ffa2719338c27bfa897481feed9abf484075a27284e8c050210cff7b7dedde6a18303440e4d8
+  checksum: 10c0/21fde8a8cb48091a8ea8be37defbc0dca5defe10a097025968b273076657f354032803a5db31ffe0fa86ab089383faa981ab674489d31e38bf7bc4dcf981ad79
   languageName: node
   linkType: hard
 
@@ -342,7 +331,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@changesets/types@npm:^6.1.0":
+"@changesets/types@npm:^6.0.0, @changesets/types@npm:^6.1.0":
   version: 6.1.0
   resolution: "@changesets/types@npm:6.1.0"
   checksum: 10c0/b4cea3a4465d1eaf0bbd7be1e404aca5a055a61d4cc72aadcb73bbbda1670b4022736b8d3052616cbf1f451afa0637545d077697f4b923236539af9cd5abce6c
@@ -1012,10 +1001,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@repo/root@workspace:."
   dependencies:
-    "@changesets/changelog-github": "npm:^0.5.2"
     "@changesets/cli": "npm:^2.29.8"
     "@repo/eslint-config": "workspace:*"
     "@repo/tsconfig": "workspace:*"
+    changesets-changelog-clean: "npm:^1.3.0"
     eslint: "npm:^9.39.2"
     prettier: "npm:^3.8.1"
     turbo: "npm:^2.8.10"
@@ -2364,6 +2353,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"changesets-changelog-clean@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "changesets-changelog-clean@npm:1.3.0"
+  dependencies:
+    "@changesets/get-github-info": "npm:^0.6.0"
+    "@changesets/types": "npm:^6.0.0"
+  checksum: 10c0/454e877ff7a0d90ffa0c364298f6da70b803032e6744701edf4c2437b411dc68870ea82bc56599c9d3b40c2510e6f952c7989fb1cf3b41150943d73ff502f40e
+  languageName: node
+  linkType: hard
+
 "character-entities@npm:^2.0.0":
   version: 2.0.2
   resolution: "character-entities@npm:2.0.2"
@@ -2690,13 +2689,6 @@ __metadata:
   version: 16.0.3
   resolution: "dotenv@npm:16.0.3"
   checksum: 10c0/109457ac5f9e930ca8066ea33887b6f839ab24d647a7a8b49ddcd1f32662e2c35591c5e5b9819063e430148a664d0927f0cbe60cf9575d89bc524f47ff7e78f0
-  languageName: node
-  linkType: hard
-
-"dotenv@npm:^8.1.0":
-  version: 8.6.0
-  resolution: "dotenv@npm:8.6.0"
-  checksum: 10c0/6750431dea8efbd54b9f2d9681b04e1ccc7989486461dcf058bb708d9e3d63b04115fcdf8840e38ad1e24a4a2e1e7c1560626c5e3ac7bc09371b127c49e2d45f
   languageName: node
   linkType: hard
 

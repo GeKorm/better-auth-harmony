@@ -19,14 +19,14 @@
     "lint:root": "CHECK_REDOS=true eslint .",
     "emit-types": "turbo run emit-types --concurrency=100% --cache-dir=.turbo",
     "typecheck": "turbo run typecheck --concurrency=100% --cache-dir=.turbo",
-    "release": "turbo run build --cache-dir=.turbo && yarn workspaces foreach -A -p -j unlimited --no-private npm publish --tolerate-republish && changeset tag",
+    "release": "turbo run build --cache-dir=.turbo && yarn workspaces foreach -A -p -j unlimited --no-private exec npm publish --provenance --tolerate-republish --access public && changeset tag",
     "format": "prettier --write \"**/*.{cjs,js,mjs,ts,tsx,md,json}\""
   },
   "devDependencies": {
-    "@changesets/changelog-github": "^0.5.2",
     "@changesets/cli": "^2.29.8",
     "@repo/eslint-config": "workspace:*",
     "@repo/tsconfig": "workspace:*",
+    "changesets-changelog-clean": "^1.3.0",
     "eslint": "^9.39.2",
     "prettier": "^3.8.1",
     "turbo": "^2.8.10",

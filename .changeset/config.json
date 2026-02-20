@@ -1,6 +1,6 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@3.0.4/schema.json",
-  "changelog": ["@changesets/changelog-github", { "repo": "gekorm/better-auth-harmony" }],
+  "changelog": ["changesets-changelog-clean", { "repo": "coastlinegaming/pixelpiers" }],
   "commit": false,
   "privatePackages": { "version": true, "tag": true },
   "fixed": [],
