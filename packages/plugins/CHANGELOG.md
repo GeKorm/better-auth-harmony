@@ -1,5 +1,30 @@
 # better-auth-harmony
 
+## 1.3.0
+
+### Minor Changes
+
+- Support mapped schema field (#31 thanks @kdcokenny)
+  _[`#35`](https://github.com/GeKorm/better-auth-harmony/pull/35)
+  [`14bcade`](https://github.com/gekorm/better-auth-harmony/commit/14bcade7d84dcf3e25a02958d07adddfb27c4aba)
+  [@GeKorm](https://github.com/GeKorm)_
+- Match new API paths
+  _[`2636c5a`](https://github.com/gekorm/better-auth-harmony/commit/2636c5a63c4adaab81575b2ccf5eca1fd04b9d0d)
+  [@GeKorm](https://github.com/GeKorm)_
+
+### Patch Changes
+
+- Fix incorrect cjs import of validator library
+  _[`#38`](https://github.com/GeKorm/better-auth-harmony/pull/38)
+  [`7e14b96`](https://github.com/gekorm/better-auth-harmony/commit/7e14b96adaf6d00f67c8e52a453098e009674dd9)
+  [@GeKorm](https://github.com/GeKorm)_
+- Upgrade dependencies
+  _[`2636c5a`](https://github.com/gekorm/better-auth-harmony/commit/2636c5a63c4adaab81575b2ccf5eca1fd04b9d0d)
+  [@GeKorm](https://github.com/GeKorm)_
+- Fix compatibility with better-auth 1.5.0
+  _[`d56b5c5`](https://github.com/gekorm/better-auth-harmony/commit/d56b5c5485e3aa72f6c72589260284e0a6f45771)
+  [@GeKorm](https://github.com/GeKorm)_
+
 ## 1.2.5
 
 ### Patch Changes
