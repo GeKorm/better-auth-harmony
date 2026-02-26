@@ -1,10 +1,8 @@
+import { getTestInstance } from 'better-auth/test';
 import { afterAll, describe, expect, it, vi } from 'vitest';
-// eslint-disable-next-line import/no-relative-packages -- couldn't find a better way to include it
-import { getTestInstance } from '../../../../better-auth/packages/better-auth/src/test-utils/test-instance';
+import type { BetterAuthPlugin } from 'better-auth/types';
 import emailHarmony, { type UserWithNormalizedEmail } from '.';
 import { allEmail, allEmailSignIn, emailForget, emailSignUp } from './matchers';
-// eslint-disable-next-line import/no-relative-packages -- couldn't find a better way to include it
-import type { BetterAuthPlugin } from '../../../../better-auth/packages/better-auth/src/types';
 
 interface SQLiteDB {
   close: () => Promise<void>;
@@ -47,8 +45,9 @@ describe('Mapped schema', async () => {
   );
 
   afterAll(async () => {
-    // TODO: Open PR for better-auth/src/test-utils/test-instance
-    await (auth.options.database as unknown as SQLiteDB).close();
+    if ('database' in auth.options) {
+      await (auth.options.database as SQLiteDB).close();
+    }
   });
 
   describe('signup', () => {
