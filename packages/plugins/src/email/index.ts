@@ -10,6 +10,15 @@ export interface UserWithNormalizedEmail extends User {
   normalizedEmail?: string | null;
 }
 
+export interface EmailHarmonySchema {
+  user: {
+    fields: {
+      /** Map the normalizedEmail field name to a custom value */
+      normalizedEmail?: string;
+    };
+  };
+}
+
 export interface EmailHarmonyOptions {
   /**
    * Allow logging in with any version of the unnormalized email address. Also works for password
@@ -56,6 +65,8 @@ export interface EmailHarmonyOptions {
      */
     validation?: Matcher[];
   };
+  /** Pass the `schema` option to customize the field names */
+  schema?: EmailHarmonySchema;
 }
 
 interface Context {
@@ -83,6 +94,7 @@ const emailHarmony = ({
   allowNormalizedSignin = false,
   validator = validateEmail,
   matchers = {},
+  schema,
   normalizer = normalizeEmail
 }: EmailHarmonyOptions = {}) =>
   ({
@@ -125,6 +137,7 @@ const emailHarmony = ({
         fields: {
           normalizedEmail: {
             type: 'string',
+            fieldName: schema?.user.fields.normalizedEmail ?? 'normalizedEmail',
             required: false,
             unique: true,
             input: false,
