@@ -737,6 +737,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@hono/node-server@npm:1.19.10":
+  version: 1.19.10
+  resolution: "@hono/node-server@npm:1.19.10"
+  peerDependencies:
+    hono: ^4
+  checksum: 10c0/ec70c3bbd2930aa82477e682253acaf978f9d13c4172074111526a99ea882eb915856f5143346cc8e8b40d88748cd15a739a06300d9d97955bd9ba2740b9ea39
+  languageName: node
+  linkType: hard
+
 "@humanfs/core@npm:^0.19.1":
   version: 0.19.1
   resolution: "@humanfs/core@npm:0.19.1"
@@ -1000,6 +1009,40 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
+  languageName: unknown
+  linkType: soft
+
+"@repo/hono-cjs@workspace:examples/hono-cjs":
+  version: 0.0.0-use.local
+  resolution: "@repo/hono-cjs@workspace:examples/hono-cjs"
+  dependencies:
+    "@hono/node-server": "npm:1.19.10"
+    "@repo/eslint-config": "workspace:*"
+    "@repo/tsconfig": "workspace:*"
+    "@types/eslint": "npm:^9.6.1"
+    "@types/node": "npm:^24.10.14"
+    better-auth: "npm:1.4.19"
+    better-auth-harmony: "workspace:*"
+    eslint: "npm:^9.39.3"
+    hono: "npm:4.12.4"
+    typescript: "npm:^5.9.3"
+  languageName: unknown
+  linkType: soft
+
+"@repo/hono-esm@workspace:examples/hono-esm":
+  version: 0.0.0-use.local
+  resolution: "@repo/hono-esm@workspace:examples/hono-esm"
+  dependencies:
+    "@hono/node-server": "npm:1.19.10"
+    "@repo/eslint-config": "workspace:*"
+    "@repo/tsconfig": "workspace:*"
+    "@types/eslint": "npm:^9.6.1"
+    "@types/node": "npm:^24.10.14"
+    better-auth: "npm:1.4.19"
+    better-auth-harmony: "workspace:*"
+    eslint: "npm:^9.39.3"
+    hono: "npm:4.12.4"
+    typescript: "npm:^5.9.3"
   languageName: unknown
   linkType: soft
 
@@ -2011,7 +2054,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"better-auth-harmony@workspace:packages/plugins":
+"better-auth-harmony@workspace:*, better-auth-harmony@workspace:packages/plugins":
   version: 0.0.0-use.local
   resolution: "better-auth-harmony@workspace:packages/plugins"
   dependencies:
@@ -3940,6 +3983,13 @@ __metadata:
   dependencies:
     function-bind: "npm:^1.1.2"
   checksum: 10c0/3769d434703b8ac66b209a4cca0737519925bbdb61dd887f93a16372b14694c63ff4e797686d87c90f08168e81082248b9b028bad60d4da9e0d1148766f56eb9
+  languageName: node
+  linkType: hard
+
+"hono@npm:4.12.4":
+  version: 4.12.4
+  resolution: "hono@npm:4.12.4"
+  checksum: 10c0/e43220730ca2ae0eb270a799ec3a8a05273787e6d6d7b2134d9703e318af38bb327c46b0fa52757dbb099060d15642808372851f0306e5683874f0b05dbf7fe4
   languageName: node
   linkType: hard
 

@@ -57,6 +57,9 @@ jobs:
       - name: Build
         run: yarn build
 
+      - name: Run example apps
+        run: yarn examples
+
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 15

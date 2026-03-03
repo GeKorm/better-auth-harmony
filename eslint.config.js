@@ -5,7 +5,7 @@ const [_ignores, ...rest] = config;
 
 export default [
   {
-    ignores: [...ignorePatterns, '!.github']
+    ignores: [...ignorePatterns, 'examples/', '!.github']
   },
   ...rest
 ];

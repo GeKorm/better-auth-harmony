@@ -1,0 +1,29 @@
+{
+  "name": "@repo/hono-cjs",
+  "version": "0.0.0",
+  "type": "commonjs",
+  "main": "index.js",
+  "private": true,
+  "files": [
+    "index.js",
+    "*.json"
+  ],
+  "scripts": {
+    "start": "NODE_ENV=production node --env-file=.env.development index.js",
+    "lint": "CHECK_REDOS=true eslint ."
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/tsconfig": "workspace:*",
+    "@types/eslint": "^9.6.1",
+    "@types/node": "^24.10.14",
+    "eslint": "^9.39.3",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@hono/node-server": "1.19.10",
+    "better-auth": "1.4.19",
+    "better-auth-harmony": "workspace:*",
+    "hono": "4.12.4"
+  }
+}

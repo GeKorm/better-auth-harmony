@@ -3,6 +3,11 @@
   "ui": "tui",
   "daemon": false,
   "tasks": {
+    "start": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "env": ["BETTER_AUTH_SECRET", "BETTER_AUTH_URL"]
+    },
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],

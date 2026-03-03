@@ -1,0 +1,8 @@
+{
+  "extends": "@repo/tsconfig/eslint.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "nodenext"
+  },
+  "exclude": ["node_modules", "${configDir}/dist", "${configDir}/packages"]
+}
