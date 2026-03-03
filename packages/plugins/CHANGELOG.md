@@ -1,5 +1,13 @@
 # better-auth-harmony
 
+## 1.3.1
+
+### Patch Changes
+
+- Fix validator.js compatibility with unbundled ESM
+  _[`f6cd02e`](https://github.com/gekorm/better-auth-harmony/commit/f6cd02e2fcbc75cff98bde7dbb6bedadd53178bb)
+  [@GeKorm](https://github.com/GeKorm)_
+
 ## 1.3.0
 
 ### Minor Changes
