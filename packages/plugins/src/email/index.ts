@@ -2,8 +2,8 @@ import { type User } from 'better-auth';
 import { APIError, createAuthMiddleware } from 'better-auth/api';
 import { type BetterAuthPlugin } from 'better-auth/types';
 import Mailchecker from 'mailchecker';
-import isEmail from 'validator/lib/isEmail';
-import normalizeEmail from 'validator/lib/normalizeEmail';
+import isEmail from 'validator/lib/isEmail.js';
+import normalizeEmail from 'validator/lib/normalizeEmail.js';
 import { allEmail, allEmailSignIn, type Matcher } from './matchers';
 
 export interface UserWithNormalizedEmail extends User {
