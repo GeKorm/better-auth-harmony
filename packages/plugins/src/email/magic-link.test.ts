@@ -243,6 +243,56 @@ describe('magic link harmony', async () => {
     });
     expect(dbUser?.email).toBe(email);
   });
+  it('should sign in with already-normalized email form', async () => {
+    const rawEmail = 'm.agic+tag@gmail.com';
+    await client.signIn.magicLink({
+      email: rawEmail,
+      name: 'magic-normalized-test'
+    });
+    let headers = new Headers();
+    await client.magicLink.verify({
+      query: {
+        token: new URL(verificationEmail.url).searchParams.get('token') ?? ''
+      },
+      fetchOptions: {
+        onSuccess: sessionSetter(headers)
+      }
+    });
+    const session = await client.getSession({
+      fetchOptions: {
+        headers
+      }
+    });
+    expect(session.data?.user).toMatchObject({
+      name: 'magic-normalized-test',
+      email: rawEmail,
+      emailVerified: true
+    });
+
+    // Now sign in with the normalized form directly
+    headers = new Headers();
+    await client.signIn.magicLink({
+      email: 'magic@gmail.com'
+    });
+    await client.magicLink.verify({
+      query: {
+        token: new URL(verificationEmail.url).searchParams.get('token') ?? ''
+      },
+      fetchOptions: {
+        onSuccess: sessionSetter(headers)
+      }
+    });
+    const session2 = await client.getSession({
+      fetchOptions: {
+        headers
+      }
+    });
+    expect(session2.data?.user).toMatchObject({
+      name: 'magic-normalized-test',
+      email: rawEmail,
+      emailVerified: true
+    });
+  });
 }, 15_000);
 
 describe('magic link verify', async () => {
