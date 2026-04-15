@@ -110,7 +110,7 @@ describe('magic link harmony', async () => {
         onError(context) {
           expect(context.response.status).toBe(302);
           const location = context.response.headers.get('location');
-          expect(location).toContain('?error=INVALID_TOKEN');
+          expect(location).toContain('?error=ATTEMPTS_EXCEEDED');
         }
       }
     );

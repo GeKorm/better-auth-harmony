@@ -106,7 +106,7 @@ describe('Mapped schema', async () => {
         name: 'new-name'
       });
 
-      expect(error?.status).toBe(422);
+      expect(error?.status).toBe(400);
     });
   });
 });
