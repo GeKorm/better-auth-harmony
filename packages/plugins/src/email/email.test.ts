@@ -143,6 +143,21 @@ describe('email harmony', async () => {
       });
       expect(error?.status).toBe(401);
     });
+
+    it('should work when signing in with already-normalized email form', async () => {
+      const rawEmail = 'a.bc+tag@gmail.com';
+      await client.signUp.email({
+        email: rawEmail,
+        password: 'normalized-test-pw',
+        name: 'normalized-test'
+      });
+      // Sign in with the normalized form directly
+      const { data } = await client.signIn.email({
+        email: 'abc@gmail.com',
+        password: 'normalized-test-pw'
+      });
+      expect(data?.user.email).toBe(rawEmail);
+    }, 15_000);
   });
 
   describe('reset password', () => {

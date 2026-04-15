@@ -178,42 +178,43 @@ const emailHarmony = ({
 
             const normalizedEmail = normalizer(email);
 
-            if (normalizedEmail !== email) {
-              const user = await ctx.context.adapter.findOne<UserWithNormalizedEmail>({
-                model: 'user',
-                where: [
-                  {
-                    field: 'normalizedEmail',
-                    value: normalizedEmail
-                  }
-                ]
-              });
+            /* v8 ignore next */
+            if (!normalizedEmail) return;
 
-              if (!user) return;
+            const user = await ctx.context.adapter.findOne<UserWithNormalizedEmail>({
+              model: 'user',
+              where: [
+                {
+                  field: 'normalizedEmail',
+                  value: normalizedEmail
+                }
+              ]
+            });
 
-              // Types are broken without explicit reference
-              return container === 'query'
-                ? {
-                    context: {
-                      ...ctx,
-                      query: {
-                        ...ctx.query,
-                        email: user.email,
-                        normalizedEmail
-                      }
-                    }
+            if (!user || user.email === email) return;
+
+            // Types are broken without explicit reference
+            return container === 'query'
+              ? {
+                context: {
+                  ...ctx,
+                  query: {
+                    ...ctx.query,
+                    email: user.email,
+                    normalizedEmail
                   }
-                : {
-                    context: {
-                      ...ctx,
-                      body: {
-                        ...(ctx.body as Context['body']),
-                        email: user.email,
-                        normalizedEmail
-                      }
-                    }
-                  };
-            }
+                }
+              }
+              : {
+                context: {
+                  ...ctx,
+                  body: {
+                    ...(ctx.body as Context['body']),
+                    email: user.email,
+                    normalizedEmail
+                  }
+                }
+              };
           })
         }
       ]

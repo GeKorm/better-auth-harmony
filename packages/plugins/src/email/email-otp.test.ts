@@ -223,6 +223,35 @@ describe('email-otp', async () => {
     expect(res.data?.token).toBeDefined();
   });
 
+  it('should sign in with otp using already-normalized email form', async () => {
+    const rawEmail = 'o.t.p.test+tag@gmail.com';
+    await client.signUp.email({
+      email: rawEmail,
+      password: 'otp-test-pw',
+      name: 'otp-test'
+    });
+    // The normalized form is 'otptest@gmail.com'
+    const normalizedForm = 'otptest@gmail.com';
+    const res = await client.emailOtp.sendVerificationOtp({
+      email: normalizedForm,
+      type: 'sign-in'
+    });
+    expect(res.data?.success).toBe(true);
+    const verifiedUser = await client.signIn.emailOtp(
+      {
+        email: normalizedForm,
+        otp
+      },
+      {
+        onSuccess: (ctx) => {
+          const header = ctx.response.headers.get('set-cookie');
+          expect(header).toContain('better-auth.session_token');
+        }
+      }
+    );
+    expect(verifiedUser.data?.token).toBeDefined();
+  });
+
   it('should fail on invalid email', async () => {
     const res = await client.emailOtp.sendVerificationOtp({
       email: 'invalid-email',
@@ -465,7 +494,7 @@ describe('custom rate limiting storage', async () => {
       plugins: [
         emailHarmony({ allowNormalizedSignin: true }),
         emailOTP({
-          async sendVerificationOTP() {}
+          async sendVerificationOTP() { }
         })
       ]
     },
