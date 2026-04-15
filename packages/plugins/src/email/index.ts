@@ -106,7 +106,7 @@ const emailHarmony = ({
         if (!email || phoneNumber) return { data: user as Required<User> };
 
         const normalizedEmail = normalizer(email);
-        /* v8 ignore next */
+        /* v8 ignore if -- @preserve */
         if (!normalizedEmail) return false;
 
         return {
@@ -178,7 +178,7 @@ const emailHarmony = ({
 
             const normalizedEmail = normalizer(email);
 
-            /* v8 ignore next */
+            /* v8 ignore if -- @preserve */
             if (!normalizedEmail) return;
 
             const user = await ctx.context.adapter.findOne<UserWithNormalizedEmail>({
@@ -196,25 +196,25 @@ const emailHarmony = ({
             // Types are broken without explicit reference
             return container === 'query'
               ? {
-                context: {
-                  ...ctx,
-                  query: {
-                    ...ctx.query,
-                    email: user.email,
-                    normalizedEmail
+                  context: {
+                    ...ctx,
+                    query: {
+                      ...ctx.query,
+                      email: user.email,
+                      normalizedEmail
+                    }
                   }
                 }
-              }
               : {
-                context: {
-                  ...ctx,
-                  body: {
-                    ...(ctx.body as Context['body']),
-                    email: user.email,
-                    normalizedEmail
+                  context: {
+                    ...ctx,
+                    body: {
+                      ...(ctx.body as Context['body']),
+                      email: user.email,
+                      normalizedEmail
+                    }
                   }
-                }
-              };
+                };
           })
         }
       ]

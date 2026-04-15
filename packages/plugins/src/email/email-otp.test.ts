@@ -494,7 +494,7 @@ describe('custom rate limiting storage', async () => {
       plugins: [
         emailHarmony({ allowNormalizedSignin: true }),
         emailOTP({
-          async sendVerificationOTP() { }
+          async sendVerificationOTP() {}
         })
       ]
     },
