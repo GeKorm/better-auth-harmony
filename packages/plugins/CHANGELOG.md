@@ -1,5 +1,13 @@
 # better-auth-harmony
 
+## 1.3.2
+
+### Patch Changes
+
+- Fix normalized email login failure (#57 thanks @Harsh-Betty !)
+  _[`6fdbb69`](https://github.com/gekorm/better-auth-harmony/commit/6fdbb6924c6b5aefdac307abdd18b71f9200044a)
+  [@GeKorm](https://github.com/GeKorm)_
+
 ## 1.3.1
 
 ### Patch Changes
