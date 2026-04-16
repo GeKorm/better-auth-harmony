@@ -1,5 +1,8 @@
 {
   "extends": "@repo/tsconfig/base.json",
+  "compilerOptions": {
+    "rootDir": "./src"
+  },
   "exclude": [
     "node_modules",
     "${configDir}/dist",

@@ -3,7 +3,7 @@
   "compilerOptions": {
     "types": ["@types/node"],
     "declaration": true,
-    "declarationMap": true,
+    "declarationMap": false,
     "esModuleInterop": true,
     "incremental": false,
     "isolatedModules": true,

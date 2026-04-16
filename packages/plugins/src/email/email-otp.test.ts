@@ -318,7 +318,7 @@ describe('email-otp', async () => {
           email: 'test@mailinator.com'
         }
       })
-    ).rejects.toThrowError('Invalid email');
+    ).rejects.toThrow('Invalid email');
   });
 
   it('should get verification otp on server', async () => {

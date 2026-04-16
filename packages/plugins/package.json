@@ -8,7 +8,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit --project tsconfig.build.json",
     "emit-types": "rimraf -g dist/**/*{.ts,.ts.map}; tsc --emitDeclarationOnly --declaration --project tsconfig.build.json",
-    "build": "tsup",
+    "build": "tsdown",
     "test": "vitest run --coverage --coverage.include=src",
     "test:watch": "vitest"
   },
@@ -39,8 +39,8 @@
   "exports": {
     ".": {
       "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
       },
       "require": {
         "types": "./dist/index.d.cts",
@@ -49,8 +49,8 @@
     },
     "./phone": {
       "import": {
-        "types": "./dist/phone.d.ts",
-        "default": "./dist/phone.js"
+        "types": "./dist/phone.d.mts",
+        "default": "./dist/phone.mjs"
       },
       "require": {
         "types": "./dist/phone.d.cts",
@@ -59,8 +59,8 @@
     },
     "./email": {
       "import": {
-        "types": "./dist/email.d.ts",
-        "default": "./dist/email.js"
+        "types": "./dist/email.d.mts",
+        "default": "./dist/email.mjs"
       },
       "require": {
         "types": "./dist/email.d.cts",
@@ -69,8 +69,8 @@
     },
     "./email/matchers": {
       "import": {
-        "types": "./dist/email/matchers.d.ts",
-        "default": "./dist/email/matchers.js"
+        "types": "./dist/email/matchers.d.mts",
+        "default": "./dist/email/matchers.mjs"
       },
       "require": {
         "types": "./dist/email/matchers.d.cts",
@@ -79,8 +79,8 @@
     },
     "./phone/matchers": {
       "import": {
-        "types": "./dist/phone/matchers.d.ts",
-        "default": "./dist/phone/matchers.js"
+        "types": "./dist/phone/matchers.d.mts",
+        "default": "./dist/phone/matchers.mjs"
       },
       "require": {
         "types": "./dist/phone/matchers.d.cts",
@@ -97,27 +97,26 @@
     "@repo/eslint-config": "*",
     "@repo/tsconfig": "*",
     "@types/eslint": "^9.6.1",
-    "@types/node": "^24.10.14",
+    "@types/node": "^24.12.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "19.2.3",
     "@types/validator": "^13.15.10",
-    "@vitest/coverage-v8": "^4.0.18",
-    "better-auth": "1.4.19",
-    "better-sqlite3": "^12.6.2",
-    "eslint": "^9.39.3",
+    "@vitest/coverage-v8": "^4.1.4",
+    "better-auth": "1.6.4",
+    "better-sqlite3": "^12.9.0",
+    "eslint": "^9.39.4",
     "rimraf": "^6.1.3",
-    "tsup": "^8.5.1",
-    "typescript": "^5.9.3",
-    "vite": "^7.3.1",
-    "vite-tsconfig-paths": "^6.1.1",
-    "vitest": "^4.0.18"
+    "tsdown": "^0.21.8",
+    "typescript": "^6.0.2",
+    "vite": "^8.0.8",
+    "vitest": "^4.1.4"
   },
   "peerDependencies": {
     "better-auth": "^1.0.3"
   },
   "dependencies": {
-    "libphonenumber-js": "^1.12.37",
-    "mailchecker": "^6.0.19",
-    "validator": "^13.15.26"
+    "libphonenumber-js": "^1.12.41",
+    "mailchecker": "^6.0.20",
+    "validator": "^13.15.35"
   }
 }
